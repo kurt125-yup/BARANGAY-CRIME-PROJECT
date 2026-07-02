@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Barangay Crime System Heatmap</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Community Safety Dashboard</p>
+          <h1>Barangay Crime System Heatmap</h1>
+          <p class="hero-copy">
+            Monitor reported incidents, prioritize hotspots, and support faster response planning.
+          </p>
+        </div>
+        <div class="hero-badge">
+          <span class="dot"></span>
+          Live monitoring
+        </div>
+      </header>
+
+      <section class="stats-grid" id="statsGrid"></section>
+
+      <main class="dashboard-grid">
+        <section class="panel heatmap-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Incident intensity</p>
+              <h2>Neighborhood heatmap</h2>
+            </div>
+            <label class="filter-box">
+              <span>Filter</span>
+              <select id="riskFilter">
+                <option value="all">All Areas</option>
+                <option value="high">High Risk</option>
+                <option value="moderate">Moderate Risk</option>
+                <option value="low">Low Risk</option>
+              </select>
+            </label>
+          </div>
+
+          <div id="heatmap" class="heatmap" aria-label="Crime heatmap"></div>
+
+          <div class="legend">
+            <span>Low</span>
+            <div class="legend-scale">
+              <div class="legend-cell low"></div>
+              <div class="legend-cell moderate"></div>
+              <div class="legend-cell high"></div>
+              <div class="legend-cell severe"></div>
+            </div>
+            <span>High</span>
+          </div>
+        </section>
+
+        <aside class="panel detail-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Selected area</p>
+              <h2 id="detailTitle">Barangay Center</h2>
+            </div>
+          </div>
+
+          <div id="detailContent" class="detail-content"></div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
