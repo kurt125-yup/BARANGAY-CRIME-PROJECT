@@ -25,23 +25,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Form Submission Handler (Prevent default reload for demo purposes)
+    // Form Submission Handler (Redirect to prototype login using actual credentials)
     const loginForm = document.getElementById('loginForm');
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        
-        // Add loading state to button
+
+        const usernameInput = document.getElementById('username');
+        const username = usernameInput?.value.trim();
+        const password = passwordInput?.value.trim();
+
+        if (!username || !password) {
+            return;
+        }
+
+        localStorage.setItem('b179_pending_login', JSON.stringify({ username, password }));
+
         const btn = loginForm.querySelector('button[type="submit"]');
         const originalContent = btn.innerHTML;
         btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Authenticating...';
         btn.disabled = true;
 
-        // Simulate network request
         setTimeout(() => {
             btn.innerHTML = originalContent;
             btn.disabled = false;
-            // Here you would normally redirect to the dashboard
-            console.log("Authentication complete. Proceed to dashboard.");
-        }, 1500);
+            window.location.href = './prototype';
+        }, 1000);
     });
 });
