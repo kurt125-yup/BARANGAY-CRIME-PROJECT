@@ -1,74 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Barangay Crime System Heatmap</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="app-shell">
-      <header class="hero">
-        <div>
-          <p class="eyebrow">Community Safety Dashboard</p>
-          <h1>Barangay Crime System Heatmap</h1>
-          <p class="hero-copy">
-            Monitor reported incidents, prioritize hotspots, and support faster response planning.
-          </p>
-        </div>
-        <div class="hero-badge">
-          <span class="dot"></span>
-          Live monitoring
-        </div>
-      </header>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barangay 179 Amparo - Crime Analytics System</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="fade-in-page">
 
-      <section class="stats-grid" id="statsGrid"></section>
-
-      <main class="dashboard-grid">
-        <section class="panel heatmap-panel">
-          <div class="panel-header">
-            <div>
-              <p class="eyebrow">Incident intensity</p>
-              <h2>Neighborhood heatmap</h2>
-            </div>
-            <label class="filter-box">
-              <span>Filter</span>
-              <select id="riskFilter">
-                <option value="all">All Areas</option>
-                <option value="high">High Risk</option>
-                <option value="moderate">Moderate Risk</option>
-                <option value="low">Low Risk</option>
-              </select>
-            </label>
-          </div>
-
-          <div id="heatmap" class="heatmap" aria-label="Crime heatmap"></div>
-
-          <div class="legend">
-            <span>Low</span>
-            <div class="legend-scale">
-              <div class="legend-cell low"></div>
-              <div class="legend-cell moderate"></div>
-              <div class="legend-cell high"></div>
-              <div class="legend-cell severe"></div>
-            </div>
-            <span>High</span>
-          </div>
-        </section>
-
-        <aside class="panel detail-panel">
-          <div class="panel-header">
-            <div>
-              <p class="eyebrow">Selected area</p>
-              <h2 id="detailTitle">Barangay Center</h2>
-            </div>
-          </div>
-
-          <div id="detailContent" class="detail-content"></div>
-        </aside>
-      </main>
+    <div class="background-container">
+        <div class="bg-panel bg-panel-1"></div>
+        <div class="bg-panel bg-panel-2"></div>
+        <div class="bg-panel bg-panel-3"></div>
+        <div class="bg-panel bg-panel-4"></div>
+        <div class="bg-wash"></div>
     </div>
 
+    <div class="main-wrapper d-flex align-items-center justify-content-center min-vh-100">
+        
+        <div class="login-card glassmorphism float-animation">
+            
+            <div class="text-center mb-4">
+                <img src="assets/logo.jpg" alt="Barangay 179 Amparo Seal" class="brand-logo mb-3">
+                
+                <div class="stars mb-2">
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                </div>
+                
+                <h2 class="system-title mb-0">Barangay 179 Amparo</h2>
+                <h2 class="system-title">Crime Analytics System</h2>
+                
+                <div class="separator mt-3 mb-4">
+                    <span></span>
+                    <i class="bi bi-shield-lock text-primary"></i>
+                    <span></span>
+                </div>
+            </div>
+
+            <form id="loginForm">
+                <div class="input-group mb-3 custom-input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-person text-muted"></i></span>
+                    <input type="text" class="form-control" placeholder="Username" required>
+                </div>
+
+                <div class="input-group mb-3 custom-input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-lock text-muted"></i></span>
+                    <input type="password" class="form-control" id="password" placeholder="Password" required>
+                    <span class="input-group-text bg-white cursor-pointer" id="togglePasswordBtn">
+                        <i class="bi bi-eye text-muted" id="togglePasswordIcon"></i>
+                    </span>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4 text-sm">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                        <label class="form-check-label text-muted" for="rememberMe">
+                            Remember me
+                        </label>
+                    </div>
+                    <a href="#" class="forgot-link">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 login-btn d-flex justify-content-center align-items-center gap-2 mb-4">
+                    Login <i class="bi bi-arrow-right"></i>
+                </button>
+            </form>
+
+            <div class="footer-section text-center">
+                <div class="footer-icon mb-2">
+                    <i class="bi bi-shield-check text-primary fs-4"></i>
+                </div>
+                <p class="mb-1 text-muted small-text">Securing our community through<br>data-driven peace and order.</p>
+                <p class="mb-0 text-muted copyright-text">&copy; 2026 Barangay 179 Amparo, Caloocan City.<br>All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="role-selector-card glassmorphism">
+        <h6 class="mb-3 text-dark fw-semibold">Login as:</h6>
+        
+        <a href="#" class="role-item text-decoration-none d-flex align-items-center justify-content-between mb-2">
+            <div class="d-flex align-items-center gap-3">
+                <div class="role-icon bg-primary text-white">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0 text-dark fw-semibold text-start">Admin</h6>
+                    <small class="text-muted" style="font-size: 0.7rem;">Full System Access</small>
+                </div>
+            </div>
+            <i class="bi bi-chevron-right text-muted small"></i>
+        </a>
+
+        <a href="#" class="role-item text-decoration-none d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                <div class="role-icon bg-warning text-white">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0 text-dark fw-semibold text-start">Barangay Captain</h6>
+                    <small class="text-muted" style="font-size: 0.7rem;">Decision-Making Access</small>
+                </div>
+            </div>
+            <i class="bi bi-chevron-right text-muted small"></i>
+        </a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
-  </body>
+</body>
 </html>
