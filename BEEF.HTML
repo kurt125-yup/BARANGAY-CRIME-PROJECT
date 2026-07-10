@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Basic Education Enrollment Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2, h3 {
+            text-align: center;
+        }
+        .section {
+            border: 1px solid black;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .field {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-size: 12px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select {
+            padding: 5px;
+            border: 1px solid #000;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .checkbox-group label {
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+
+<h2>BASIC EDUCATION ENROLLMENT FORM</h2>
+<p style="text-align:center;">THIS FORM IS NOT FOR SALE</p>
+
+<div class="section">
+    <div class="row">
+        <div class="field">
+            <label>School Year</label>
+            <input type="text">
+        </div>
+        <div class="field">
+            <label>Grade Level to Enroll</label>
+            <input type="text">
+        </div>
+    </div>
+
+    <div class="checkbox-group">
+        <label><input type="checkbox"> With LRN</label>
+        <label><input type="checkbox"> Returning (Balik-Aral)</label>
+    </div>
+</div>
+
+<h3>LEARNER INFORMATION</h3>
+<div class="section">
+    <div class="row">
+        <div class="field">
+            <label>Last Name</label>
+            <input type="text">
+        </div>
+        <div class="field">
+            <label>First Name</label>
+            <input type="text">
+        </div>
+        <div class="field">
+            <label>Middle Name</label>
+            <input type="text">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="field">
+            <label>Birthdate</label>
+            <input type="date">
+        </div>
+        <div class="field">
+            <label>Sex</label>
+            <select>
+                <option>Male</option>
+                <option>Female</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Age</label>
+            <input type="number">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="field">
+            <label>Place of Birth</label>
+            <input type="text">
+        </div>
+        <div class="field">
+            <label>Mother Tongue</label>
+            <input type="text">
+        </div>
+    </div>
+
+    <div class="checkbox-group">
+        <label><input type="checkbox"> Indigenous People (IP)</label>
+        <label><input type="checkbox"> 4Ps Beneficiary</label>
+        <label><input type="checkbox"> Learner with Disability</label>
+    </div>
+</div>
+
+<h3>ADDRESS INFORMATION</h3>
+<div class="section">
+    <div class="row">
+        <div class="field">
+            <label>House No./Street</label>
+            <input type="text">
+        </div>
+        <div class="field">
+            <label>Barangay</label>
+            <input type="text">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="field">
+            <label>Municipality/City</label>
+            <input type="text">
+        </div>
+        <div class="field">
+            <label>Province</label>
+            <input type="text">
+        </div>
+        <div class="field">
+            <label>Zip Code</label>
+            <input type="text">
+        </div>
+    </div>
+</div>
+
+<h3>PARENTS/GUARDIAN'S INFORMATION</h3>
+<div class="section">
+    <div class="row">
+        <div class="field">
+            <label>Father's Name</label>
+            <input type="text">
+        </div>
+        <div class="field">
+            <label>Contact Number</label>
+            <input type="text">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="field">
+            <label>Mother's Maiden Name</label>
+            <input type="text">
+        </div>
+        <div class="field">
+            <label>Contact Number</label>
+            <input type="text">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="field">
+            <label>Legal Guardian's Name</label>
+            <input type="text">
+        </div>
+        <div class="field">
+            <label>Contact Number</label>
+            <input type="text">
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
