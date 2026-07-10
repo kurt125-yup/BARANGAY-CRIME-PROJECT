@@ -1,0 +1,4195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Barangay 179 Crime Intelligence and Patrol Decision Support System</title>
+
+  <style>
+    :root {
+      --navy: #0f172a;
+      --navy2: #111827;
+      --blue: #2563eb;
+      --cyan: #06b6d4;
+      --green: #16a34a;
+      --yellow: #eab308;
+      --orange: #f97316;
+      --red: #dc2626;
+      --soft-red: #fee2e2;
+      --bg: #f3f6fb;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #64748b;
+      --border: #e5e7eb;
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.10);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .login-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(6, 182, 212, 0.22), transparent 32%),
+        radial-gradient(circle at 85% 85%, rgba(220, 38, 38, 0.18), transparent 30%),
+        linear-gradient(135deg, #0f172a, #111827 60%, #1e293b);
+    }
+
+    .login-hero {
+      color: white;
+      padding: 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .badge {
+      width: fit-content;
+      padding: 10px 15px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #dbeafe;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+
+    .login-hero h1 {
+      max-width: 830px;
+      font-size: clamp(34px, 5vw, 62px);
+      line-height: 1;
+      letter-spacing: -2px;
+      margin-bottom: 22px;
+    }
+
+    .login-hero p {
+      color: #cbd5e1;
+      max-width: 720px;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .hero-stats {
+      margin-top: 40px;
+      max-width: 720px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .hero-stat {
+      padding: 20px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-stat strong {
+      display: block;
+      font-size: 30px;
+      margin-bottom: 5px;
+    }
+
+    .hero-stat span {
+      color: #cbd5e1;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .login-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 36px;
+    }
+
+    .login-card {
+      width: min(460px, 100%);
+      background: white;
+      padding: 34px;
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 6px;
+      background: linear-gradient(90deg, var(--green), var(--yellow), var(--red));
+    }
+
+    .login-card h2 {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .login-card p {
+      color: var(--muted);
+      margin-bottom: 22px;
+      line-height: 1.5;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      color: #334155;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: white;
+      color: var(--text);
+      outline: none;
+      transition: 0.2s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-weight: 800;
+      transition: 0.18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: 0 12px 24px rgba(37, 99, 235, 0.22);
+    }
+
+    .btn-dark {
+      background: var(--navy);
+      color: white;
+    }
+
+    .btn-light {
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid var(--border);
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .btn-success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .btn-warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .sample-accounts {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .sample {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      color: #475569;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 292px 1fr;
+    }
+
+    .sidebar {
+      background: linear-gradient(180deg, var(--navy), var(--navy2));
+      color: white;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      padding: 24px 18px;
+      overflow-y: auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 22px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .brand-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      font-weight: 900;
+      box-shadow: 0 12px 30px rgba(6, 182, 212, 0.25);
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 15px;
+      line-height: 1.2;
+    }
+
+    .brand span {
+      display: block;
+      color: #94a3b8;
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    .user-box {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 18px;
+    }
+
+    .user-box strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .user-box span {
+      color: #cbd5e1;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .nav {
+      display: grid;
+      gap: 7px;
+    }
+
+    .nav button {
+      width: 100%;
+      text-align: left;
+      padding: 13px 14px;
+      border-radius: 14px;
+      background: transparent;
+      color: #cbd5e1;
+      font-weight: 750;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      transition: 0.18s ease;
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(2px);
+    }
+
+    .main {
+      min-width: 0;
+      padding: 24px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 16px;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 18px 22px;
+      margin-bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    }
+
+    .page-title h2 {
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .page-title p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .mobile-menu {
+      display: none;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.055);
+      transition: box-shadow 0.18s ease, transform 0.18s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08);
+    }
+
+    .clean-card {
+      border-radius: 24px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+    }
+
+    .stat-card {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .stat-card::after {
+      content: "";
+      position: absolute;
+      right: -44px;
+      top: -44px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(37, 99, 235, 0.08);
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .stat-value {
+      margin: 10px 0 4px;
+      font-size: 30px;
+      font-weight: 950;
+      letter-spacing: -0.04em;
+      word-break: break-word;
+    }
+
+    .stat-note {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section-title h3 {
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .section-title span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .chart-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .chart-head h3 {
+      font-size: 18px;
+    }
+
+    .chart-head select {
+      width: 170px;
+      padding: 9px 10px;
+      font-size: 13px;
+    }
+
+    .loading-line {
+      height: 5px;
+      margin-bottom: 16px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      animation: loading 1.2s linear infinite;
+      opacity: 0.75;
+    }
+
+    @keyframes loading {
+      from {
+        transform: translateX(-60%);
+      }
+      to {
+        transform: translateX(60%);
+      }
+    }
+
+    .bar-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 36px;
+      gap: 12px;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .bar-track {
+      height: 13px;
+      background: #eef2f7;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+      animation: grow 0.55s ease both;
+    }
+
+    @keyframes grow {
+      from {
+        width: 0;
+      }
+    }
+
+    .pie {
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      margin: 10px auto 20px;
+      box-shadow: inset 0 0 0 18px rgba(255, 255, 255, 0.75);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .green-dot {
+      background: var(--green);
+    }
+
+    .yellow-dot {
+      background: var(--yellow);
+    }
+
+    .red-dot {
+      background: var(--red);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 18px;
+      background: #ffffff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      padding: 14px 12px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    tbody tr:hover td {
+      background: #fafafa;
+    }
+
+    td strong {
+      color: #0f172a;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .level-1 {
+      color: #166534;
+      background: #dcfce7;
+    }
+
+    .level-2 {
+      color: #854d0e;
+      background: #fef9c3;
+    }
+
+    .level-3 {
+      color: #991b1b;
+      background: #fee2e2;
+    }
+
+    .status-open {
+      color: #1d4ed8;
+      background: #dbeafe;
+    }
+
+    .status-monitoring {
+      color: #92400e;
+      background: #fef3c7;
+    }
+
+    .status-resolved {
+      color: #166534;
+      background: #dcfce7;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 1.2fr repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .hotspot-rank-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .hotspot-rank-item {
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 22px;
+      padding: 18px 18px 16px;
+      transition: 0.18s ease;
+    }
+
+    .hotspot-rank-item:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .hotspot-rank-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .hotspot-rank-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 1.35;
+    }
+
+    .hotspot-rank-desc {
+      margin-top: 10px;
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .hotspot-rank-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .map-shell {
+      position: relative;
+      height: 640px;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid #dbe2ea;
+      background: #dbeafe;
+      box-shadow: 0 16px 42px rgba(15, 23, 42, 0.12);
+    }
+
+    .map-shell::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+      z-index: 2;
+    }
+
+    #googleMap,
+    #fallbackMap {
+      position: absolute;
+      inset: 0;
+    }
+
+    #googleMap {
+      z-index: 1;
+    }
+
+    #fallbackMap {
+      z-index: 2;
+    }
+
+    .google-iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      filter: saturate(1.04) contrast(1.04);
+      pointer-events: none;
+    }
+
+    .map-label {
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      z-index: 10;
+      max-width: 390px;
+      padding: 13px 15px;
+      border-radius: 16px;
+      color: white;
+      background: rgba(15, 23, 42, 0.90);
+      box-shadow: var(--shadow);
+    }
+
+    .map-label strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .map-label span {
+      color: #cbd5e1;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .api-note {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      z-index: 10;
+      max-width: 350px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      color: #334155;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.16);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .map-command-badge {
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      z-index: 10;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.88);
+      color: #fff;
+      font-size: 12px;
+      line-height: 1.45;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2);
+      max-width: 430px;
+    }
+
+    .map-command-badge strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    #fallbackMarkers {
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    #fallbackBoundary {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .fallback-boundary-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .fallback-hotspot-patch {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 82px;
+      height: 82px;
+      border-radius: 8px;
+      background:
+        repeating-linear-gradient(
+          45deg,
+          rgba(220, 38, 38, 0.92) 0 2px,
+          transparent 2px 10px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(220, 38, 38, 0.92) 0 2px,
+          transparent 2px 10px
+        );
+      opacity: 0.96;
+      z-index: 4;
+    }
+
+    .fallback-zone-pin {
+      position: absolute;
+      width: 34px;
+      height: 48px;
+      transform: translate(-50%, -100%);
+      z-index: 6;
+    }
+
+    .fallback-zone-pin .pin-shape {
+      width: 34px;
+      height: 48px;
+      background: #f97316;
+      border: 2px solid #111827;
+      border-radius: 17px 17px 17px 0;
+      transform: rotate(-45deg);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.22);
+    }
+
+    .fallback-zone-pin .pin-number {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #111827;
+      font-size: 13px;
+      transform: translateY(-4px);
+    }
+
+    .gm-hatched-hotspot {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 84px;
+      height: 84px;
+      border-radius: 8px;
+      background:
+        repeating-linear-gradient(
+          45deg,
+          rgba(220, 38, 38, 0.92) 0 2px,
+          transparent 2px 10px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(220, 38, 38, 0.92) 0 2px,
+          transparent 2px 10px
+        );
+      pointer-events: none;
+      opacity: 0.96;
+      z-index: 999;
+    }
+
+    .gm-zone-label {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.88);
+      color: white;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .client-boundary-label,
+    .gm-boundary-label {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.96);
+      color: #111827;
+      border: 2px solid #111827;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.16);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    .client-boundary-label {
+      left: 50%;
+      top: 10%;
+      z-index: 8;
+    }
+
+    .boundary-node {
+      display: none;
+    }
+
+    .fallback-warning-sign,
+    .gm-warning-sign {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 1001;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ff8a8a 0%, #ef4444 36%, #dc2626 70%, #991b1b 100%);
+      border: 3px solid #ffffff;
+      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.82), 0 14px 26px rgba(220, 38, 38, 0.30), 0 0 22px rgba(220, 38, 38, 0.22);
+      animation: warningFloat 1.35s ease-in-out infinite;
+    }
+
+    .fallback-warning-sign::before,
+    .gm-warning-sign::before {
+      content: "!";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      font-size: 26px;
+      font-weight: 1000;
+      font-family: Arial, sans-serif;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.24);
+    }
+
+    .fallback-warning-sign::after,
+    .gm-warning-sign::after {
+      content: "";
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      border: 2px solid rgba(220, 38, 38, 0.38);
+      animation: warningHalo 1.7s ease-out infinite;
+    }
+
+    .fallback-risk-pulse,
+    .gm-risk-pulse {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 118px;
+      height: 118px;
+      border-radius: 50%;
+      border: 2px solid rgba(220, 38, 38, 0.72);
+      background: radial-gradient(circle, rgba(220, 38, 38, 0.20) 0%, rgba(220, 38, 38, 0.08) 42%, rgba(220, 38, 38, 0.0) 70%);
+      pointer-events: none;
+      z-index: 3;
+      animation: riskPulse 1.65s ease-out infinite;
+    }
+
+    @keyframes warningFloat {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.08);
+      }
+    }
+
+    @keyframes warningHalo {
+      0% {
+        opacity: 0.92;
+        transform: scale(0.92);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(1.28);
+      }
+    }
+
+    @keyframes riskPulse {
+      0% {
+        opacity: 0.9;
+        transform: translate(-50%, -50%) scale(0.86);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.35);
+      }
+    }
+
+
+    .report-card {
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .report-card p {
+      margin-top: 8px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .recommendation {
+      border-left: 6px solid var(--red);
+      background: linear-gradient(135deg, #fef2f2, white);
+    }
+
+    .priority-badge {
+      display: inline-flex;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #fee2e2;
+      color: #991b1b;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .tree {
+      display: grid;
+      gap: 14px;
+    }
+
+    .tree-node {
+      padding: 14px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border-left: 5px solid var(--blue);
+    }
+
+    .tree-node strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .tree-children {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-left: 18px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 100;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: var(--navy);
+      color: white;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(14px);
+      transition: 0.25s;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+
+
+    /* PROFESSIONAL BARANGAY BARRIER + WARNING SIGN REWORK */
+    .fallback-hotspot-patch,
+    .gm-hatched-hotspot,
+    .gm-zone-label {
+      display: none !important;
+    }
+
+    .fallback-risk-zone,
+    .gm-risk-zone {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .fallback-risk-zone.level1,
+    .gm-risk-zone.level1 {
+      width: 58px;
+      height: 58px;
+      border: 2px solid rgba(22, 163, 74, 0.45);
+      background: radial-gradient(circle, rgba(22, 163, 74, 0.16), rgba(22, 163, 74, 0.03) 68%, transparent 72%);
+    }
+
+    .fallback-risk-zone.level2,
+    .gm-risk-zone.level2 {
+      width: 82px;
+      height: 82px;
+      border: 2px solid rgba(234, 179, 8, 0.65);
+      background: radial-gradient(circle, rgba(234, 179, 8, 0.22), rgba(234, 179, 8, 0.05) 68%, transparent 72%);
+    }
+
+    .fallback-risk-zone.level3,
+    .gm-risk-zone.level3 {
+      width: 126px;
+      height: 126px;
+      border: 3px solid rgba(220, 38, 38, 0.82);
+      background: radial-gradient(circle, rgba(220, 38, 38, 0.26), rgba(220, 38, 38, 0.08) 58%, transparent 74%);
+      box-shadow: 0 0 0 8px rgba(220, 38, 38, 0.06), 0 0 24px rgba(220, 38, 38, 0.32);
+      animation: professionalRiskPulse 1.65s ease-out infinite;
+    }
+
+    .fallback-alert-marker,
+    .gm-alert-marker {
+      position: absolute;
+      width: 52px;
+      height: 52px;
+      transform: translate(-50%, -50%);
+      z-index: 1002;
+      pointer-events: none;
+    }
+
+    .fallback-alert-marker .alert-head,
+    .gm-alert-marker .alert-head {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 3px solid #ffffff;
+      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.82), 0 14px 26px rgba(15, 23, 42, 0.22);
+      overflow: hidden;
+    }
+
+    .fallback-alert-marker.level3 .alert-head,
+    .gm-alert-marker.level3 .alert-head {
+      background: radial-gradient(circle at 35% 35%, #ff8a8a 0%, #ef4444 36%, #dc2626 70%, #991b1b 100%);
+      animation: warningBlink 1.15s ease-in-out infinite;
+    }
+
+    .fallback-alert-marker.level2 .alert-head,
+    .gm-alert-marker.level2 .alert-head {
+      background: radial-gradient(circle at 35% 35%, #fff1a8 0%, #facc15 42%, #eab308 78%, #a16207 100%);
+    }
+
+    .fallback-alert-marker.level1 .alert-head,
+    .gm-alert-marker.level1 .alert-head {
+      background: radial-gradient(circle at 35% 35%, #a7f3d0 0%, #4ade80 42%, #16a34a 78%, #166534 100%);
+    }
+
+    .fallback-alert-marker .alert-head::before,
+    .gm-alert-marker .alert-head::before {
+      content: "!";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: 1000;
+      font-family: Arial, sans-serif;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.28);
+    }
+
+    .fallback-alert-marker.level1 .alert-head::before,
+    .gm-alert-marker.level1 .alert-head::before {
+      content: "•";
+      font-size: 32px;
+      line-height: 1;
+      color: #ffffff;
+    }
+
+    .fallback-alert-marker .alert-head::after,
+    .gm-alert-marker .alert-head::after {
+      content: "";
+      position: absolute;
+      inset: -7px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.18);
+      opacity: 0;
+    }
+
+    .fallback-alert-marker.level3 .alert-head::after,
+    .gm-alert-marker.level3 .alert-head::after {
+      animation: warningHalo 1.7s ease-out infinite;
+    }
+
+    .fallback-alert-marker .alert-stem,
+    .gm-alert-marker .alert-stem {
+      display: none;
+    }
+
+    .fallback-zone-number,
+    .gm-zone-number {
+      position: absolute;
+      transform: translate(-50%, 28px);
+      z-index: 1003;
+      min-width: 23px;
+      height: 23px;
+      padding: 0 7px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: #0f172a;
+      color: #ffffff;
+      border: 2px solid #ffffff;
+      font-size: 11px;
+      font-weight: 900;
+      pointer-events: none;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.22);
+    }
+
+    @keyframes professionalRiskPulse {
+      0% {
+        opacity: 0.92;
+        transform: translate(-50%, -50%) scale(0.88);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.28);
+      }
+    }
+
+    @keyframes warningBlink {
+      0%, 100% {
+        transform: translateX(-50%) scale(1);
+        box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.72), 0 0 20px rgba(220, 38, 38, 0.24);
+      }
+      50% {
+        transform: translateX(-50%) scale(1.08);
+        box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.72), 0 0 34px rgba(220, 38, 38, 0.62);
+      }
+    }
+
+    @media print {
+      .sidebar,
+      .topbar,
+      .no-print {
+        display: none !important;
+      }
+
+      .app {
+        display: block;
+      }
+
+      .main {
+        padding: 0;
+      }
+
+      .card {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .login-page {
+        grid-template-columns: 1fr;
+      }
+
+      .login-hero {
+        padding: 44px 24px;
+      }
+
+      .hero-stats,
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .filters,
+      .form-grid,
+      .tree-children {
+        grid-template-columns: 1fr;
+      }
+
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: fixed;
+        z-index: 50;
+        width: 292px;
+        transform: translateX(-110%);
+        transition: 0.25s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .mobile-menu {
+        display: inline-flex;
+      }
+
+      .map-shell {
+        height: 520px;
+      }
+
+      .api-note {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .main {
+        padding: 14px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .chart-head {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .chart-head select {
+        width: 100%;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      table {
+        min-width: 880px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section id="loginPage" class="login-page">
+    <div class="login-hero">
+      <div class="badge">Business Intelligence • CART Analytics • Google Maps • Patrol Support</div>
+
+      <h1>Barangay 179 Crime Intelligence and Patrol Decision Support System</h1>
+
+      <p>
+        A modern application-based public safety prototype for recording incidents, analyzing crime patterns,
+        mapping hotspot zones, classifying danger levels, and supporting barangay patrol decisions.
+      </p>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <strong>BI</strong>
+          <span>Dashboard Analytics</span>
+        </div>
+
+        <div class="hero-stat">
+          <strong>CART</strong>
+          <span>Decision Tree Classifier</span>
+        </div>
+
+        <div class="hero-stat">
+          <strong>179</strong>
+          <span>Barangay-Focused Map</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="login-panel">
+      <div class="login-card">
+        <h2>Secure Login</h2>
+        <p>Use the sample accounts below to test role-based access.</p>
+
+        <form id="loginForm">
+          <div class="field">
+            <label>Username</label>
+            <input id="username" type="text" placeholder="Enter username" required />
+          </div>
+
+          <div class="field">
+            <label>Password</label>
+            <input id="password" type="password" placeholder="Enter password" required />
+          </div>
+
+          <button class="btn btn-primary btn-full" type="submit">Login to System</button>
+        </form>
+
+        <div class="sample-accounts">
+          <div class="sample"><strong>Administrator:</strong> admin / admin123</div>
+          <div class="sample"><strong>Decision-Maker:</strong> captain / captain123</div>
+          <div class="sample"><strong>Field User:</strong> tanod / tanod123</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="appPage" class="app hidden">
+    <aside id="sidebar" class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">179</div>
+
+        <div>
+          <strong>Barangay 179 Crime BI</strong>
+          <span>Public Safety Command Center</span>
+        </div>
+      </div>
+
+      <div class="user-box">
+        <strong id="userDisplay">User</strong>
+        <span id="roleDisplay">Role</span>
+      </div>
+
+      <nav id="nav" class="nav"></nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="btn btn-light mobile-menu" onclick="toggleSidebar()">Menu</button>
+
+        <div class="page-title">
+          <h2 id="pageTitle">Dashboard</h2>
+          <p id="pageSubtitle">Business Intelligence overview for barangay-level public safety.</p>
+        </div>
+
+        <div class="top-actions">
+          <button class="btn btn-light" onclick="showPage(defaultPageForRole())">Home</button>
+          <button class="btn btn-dark" onclick="logout()">Logout</button>
+        </div>
+      </header>
+
+      <section id="content"></section>
+    </main>
+  </section>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const GOOGLE_MAPS_API_KEY_PLACEHOLDER = "YOUR_GOOGLE_MAPS_API_KEY_HERE";
+
+    const BRGY_CENTER = {
+      lat: 14.7569,
+      lng: 121.0498
+    };
+
+    const BRGY_RESTRICTION_BOUNDS = {
+      north: 14.7630,
+      south: 14.7500,
+      east: 121.0588,
+      west: 121.0418
+    };
+
+    const BRGY_BOUNDARY = [
+      { lat: 14.7616, lng: 121.0439 },
+      { lat: 14.7622, lng: 121.0536 },
+      { lat: 14.7584, lng: 121.0578 },
+      { lat: 14.7520, lng: 121.0560 },
+      { lat: 14.7507, lng: 121.0472 },
+      { lat: 14.7544, lng: 121.0426 }
+    ];
+
+    const ROLE_LABELS = {
+      admin: "Administrator — Barangay Secretary / IT Personnel",
+      captain: "Decision-Maker — Barangay Captain / Kagawad",
+      tanod: "Field User — Barangay Tanod"
+    };
+
+    const DEFAULT_USERS = [
+      {
+        username: "admin",
+        password: "admin123",
+        role: "admin",
+        name: "Barangay Secretary"
+      },
+      {
+        username: "captain",
+        password: "captain123",
+        role: "captain",
+        name: "Barangay Captain"
+      },
+      {
+        username: "tanod",
+        password: "tanod123",
+        role: "tanod",
+        name: "Barangay Tanod"
+      }
+    ];
+
+    const NAV_ITEMS = [
+      {
+        id: "dashboard",
+        icon: "BI",
+        label: "BI Dashboard",
+        roles: ["admin", "captain"]
+      },
+      {
+        id: "fieldDashboard",
+        icon: "Field",
+        label: "Field Dashboard",
+        roles: ["tanod"]
+      },
+      {
+        id: "incidents",
+        icon: "Records",
+        label: "Incident Records",
+        roles: ["admin"]
+      },
+      {
+        id: "map",
+        icon: "Map",
+        label: "Barangay Risk Map",
+        roles: ["admin", "captain", "tanod"]
+      },
+      {
+        id: "cart",
+        icon: "CART",
+        label: "CART Analytics",
+        roles: ["admin", "captain"]
+      },
+      {
+        id: "patrol",
+        icon: "Patrol",
+        label: "Patrol Decision Support",
+        roles: ["admin", "captain", "tanod"]
+      },
+      {
+        id: "reports",
+        icon: "Reports",
+        label: "Reports",
+        roles: ["admin", "captain"]
+      },
+      {
+        id: "users",
+        icon: "Users",
+        label: "User Management",
+        roles: ["admin"]
+      },
+      {
+        id: "settings",
+        icon: "Settings",
+        label: "Settings",
+        roles: ["admin"]
+      }
+    ];
+
+    const DEFAULT_INCIDENTS = [
+      {
+        id: "INC-2026-001",
+        type: "Theft",
+        date: "2026-06-01",
+        time: "20:35",
+        location: "Purok 3 - Amparo Main Road",
+        description: "Repeated theft complaint near residential alley.",
+        reportedBy: "Tanod Patrol A",
+        status: "Monitoring",
+        danger: 3,
+        lat: 14.7585,
+        lng: 121.0513,
+        action: "Priority patrol and close monitoring"
+      },
+      {
+        id: "INC-2026-002",
+        type: "Physical Injury",
+        date: "2026-06-02",
+        time: "22:10",
+        location: "Purok 5 - Market Area",
+        description: "Disturbance and minor physical injury reported during late evening.",
+        reportedBy: "Resident Report",
+        status: "Open",
+        danger: 3,
+        lat: 14.7566,
+        lng: 121.0544,
+        action: "Increase tanod visibility from 7 PM to 11 PM"
+      },
+      {
+        id: "INC-2026-003",
+        type: "Noise Complaint",
+        date: "2026-06-03",
+        time: "19:20",
+        location: "Purok 2 - Residential Block",
+        description: "Noise disturbance from repeated gatherings.",
+        reportedBy: "Tanod Patrol B",
+        status: "Resolved",
+        danger: 2,
+        lat: 14.7549,
+        lng: 121.0484,
+        action: "Scheduled patrol and resident reminder"
+      },
+      {
+        id: "INC-2026-004",
+        type: "Vandalism",
+        date: "2026-06-04",
+        time: "16:45",
+        location: "Purok 1 - School Zone",
+        description: "Wall vandalism near school perimeter.",
+        reportedBy: "School Staff",
+        status: "Monitoring",
+        danger: 2,
+        lat: 14.7595,
+        lng: 121.0461,
+        action: "Afternoon patrol monitoring"
+      },
+      {
+        id: "INC-2026-005",
+        type: "Suspicious Activity",
+        date: "2026-06-05",
+        time: "23:15",
+        location: "Purok 4 - Alley 7",
+        description: "Suspicious persons reported repeatedly at night.",
+        reportedBy: "Resident Report",
+        status: "Open",
+        danger: 3,
+        lat: 14.7533,
+        lng: 121.0529,
+        action: "Priority patrol and incident validation"
+      },
+      {
+        id: "INC-2026-006",
+        type: "Traffic Obstruction",
+        date: "2026-06-05",
+        time: "08:30",
+        location: "Purok 6 - Entrance Road",
+        description: "Road obstruction during morning peak hours.",
+        reportedBy: "Tanod Patrol C",
+        status: "Resolved",
+        danger: 1,
+        lat: 14.7556,
+        lng: 121.0452,
+        action: "Normal monitoring"
+      },
+      {
+        id: "INC-2026-007",
+        type: "Theft",
+        date: "2026-06-06",
+        time: "21:40",
+        location: "Purok 3 - Amparo Main Road",
+        description: "Another theft report near the same hotspot area.",
+        reportedBy: "Resident Report",
+        status: "Open",
+        danger: 3,
+        lat: 14.7588,
+        lng: 121.0507,
+        action: "Deploy additional tanods"
+      },
+      {
+        id: "INC-2026-008",
+        type: "Curfew Violation",
+        date: "2026-06-06",
+        time: "23:55",
+        location: "Purok 2 - Basketball Court",
+        description: "Curfew-related concern reported late at night.",
+        reportedBy: "Tanod Patrol B",
+        status: "Monitoring",
+        danger: 2,
+        lat: 14.7542,
+        lng: 121.0499,
+        action: "Scheduled patrol and warning notice"
+      },
+      {
+        id: "INC-2026-009",
+        type: "Theft",
+        date: "2026-05-04",
+        time: "21:05",
+        location: "Purok 3 - Amparo Main Road",
+        description: "Reported theft incident near repeated hotspot area.",
+        reportedBy: "Tanod Patrol A",
+        status: "Resolved",
+        danger: 3,
+        lat: 14.7584,
+        lng: 121.0511,
+        action: "Priority patrol and close monitoring"
+      },
+      {
+        id: "INC-2026-010",
+        type: "Noise Complaint",
+        date: "2026-05-08",
+        time: "20:10",
+        location: "Purok 2 - Residential Block",
+        description: "Repeated noise complaint from evening gathering.",
+        reportedBy: "Resident Report",
+        status: "Resolved",
+        danger: 2,
+        lat: 14.7548,
+        lng: 121.0482,
+        action: "Scheduled patrol and resident reminder"
+      },
+      {
+        id: "INC-2026-011",
+        type: "Suspicious Activity",
+        date: "2026-05-15",
+        time: "22:45",
+        location: "Purok 4 - Alley 7",
+        description: "Suspicious activity reported during late-night patrol.",
+        reportedBy: "Tanod Patrol C",
+        status: "Monitoring",
+        danger: 3,
+        lat: 14.7532,
+        lng: 121.0527,
+        action: "Priority patrol and incident validation"
+      },
+      {
+        id: "INC-2026-012",
+        type: "Traffic Obstruction",
+        date: "2026-05-22",
+        time: "07:50",
+        location: "Purok 6 - Entrance Road",
+        description: "Morning traffic obstruction near entry road.",
+        reportedBy: "Tanod Patrol C",
+        status: "Resolved",
+        danger: 1,
+        lat: 14.7557,
+        lng: 121.0451,
+        action: "Normal monitoring"
+      },
+      {
+        id: "INC-2026-013",
+        type: "Physical Injury",
+        date: "2026-04-03",
+        time: "21:30",
+        location: "Purok 5 - Market Area",
+        description: "Physical injury complaint during evening market hours.",
+        reportedBy: "Resident Report",
+        status: "Resolved",
+        danger: 3,
+        lat: 14.7565,
+        lng: 121.0543,
+        action: "Increase tanod visibility from 7 PM to 11 PM"
+      },
+      {
+        id: "INC-2026-014",
+        type: "Vandalism",
+        date: "2026-04-11",
+        time: "16:20",
+        location: "Purok 1 - School Zone",
+        description: "Vandalism reported near school wall.",
+        reportedBy: "School Staff",
+        status: "Resolved",
+        danger: 2,
+        lat: 14.7594,
+        lng: 121.0462,
+        action: "Afternoon patrol monitoring"
+      },
+      {
+        id: "INC-2026-015",
+        type: "Curfew Violation",
+        date: "2026-04-18",
+        time: "23:20",
+        location: "Purok 2 - Basketball Court",
+        description: "Curfew-related incident during late night.",
+        reportedBy: "Tanod Patrol B",
+        status: "Monitoring",
+        danger: 2,
+        lat: 14.7543,
+        lng: 121.0498,
+        action: "Scheduled patrol and warning notice"
+      },
+      {
+        id: "INC-2026-016",
+        type: "Theft",
+        date: "2026-04-27",
+        time: "20:50",
+        location: "Purok 3 - Amparo Main Road",
+        description: "Theft report in repeated high-risk area.",
+        reportedBy: "Resident Report",
+        status: "Resolved",
+        danger: 3,
+        lat: 14.7587,
+        lng: 121.0509,
+        action: "Deploy additional tanods"
+      }
+    ];
+
+    let currentUser = null;
+    let currentPage = null;
+    let editingIncidentId = null;
+    let selectedAnalyticsMonth = "2026-06";
+    let googleMapInstance = null;
+
+    const $ = selector => document.querySelector(selector);
+
+    function getUsers() {
+      return JSON.parse(localStorage.getItem("b179_users")) || DEFAULT_USERS;
+    }
+
+    function saveUsers(users) {
+      localStorage.setItem("b179_users", JSON.stringify(users));
+    }
+
+    function getIncidents() {
+      return JSON.parse(localStorage.getItem("b179_incidents")) || DEFAULT_INCIDENTS;
+    }
+
+    function saveIncidents(records) {
+      localStorage.setItem("b179_incidents", JSON.stringify(records));
+    }
+
+    function toast(message) {
+      const el = $("#toast");
+      el.textContent = message;
+      el.classList.add("show");
+
+      setTimeout(() => {
+        el.classList.remove("show");
+      }, 2400);
+    }
+
+    function dangerInfo(level) {
+      const data = {
+        1: {
+          label: "Level 1 — Low Danger",
+          short: "Level 1",
+          className: "level-1",
+          color: "#16a34a",
+          action: "Normal monitoring"
+        },
+        2: {
+          label: "Level 2 — Moderate Danger",
+          short: "Level 2",
+          className: "level-2",
+          color: "#eab308",
+          action: "Increased awareness and scheduled patrol"
+        },
+        3: {
+          label: "Level 3 — High Crime / Considerable Danger",
+          short: "Level 3",
+          className: "level-3",
+          color: "#dc2626",
+          action: "Priority patrol and close monitoring"
+        }
+      };
+
+      return data[level] || data[1];
+    }
+
+    function statusClass(status) {
+      const key = String(status).toLowerCase();
+
+      if (key.includes("resolved")) return "status-resolved";
+      if (key.includes("monitoring")) return "status-monitoring";
+
+      return "status-open";
+    }
+
+    function login(event) {
+      event.preventDefault();
+
+      const username = $("#username").value.trim();
+      const password = $("#password").value.trim();
+      const users = getUsers();
+
+      const user = users.find(item => {
+        return item.username === username && item.password === password;
+      });
+
+      if (!user) {
+        toast("Invalid username or password.");
+        return;
+      }
+
+      currentUser = user;
+
+      $("#loginPage").classList.add("hidden");
+      $("#appPage").classList.remove("hidden");
+      $("#userDisplay").textContent = user.name || user.username;
+      $("#roleDisplay").textContent = ROLE_LABELS[user.role] || user.role;
+
+      renderNav();
+      showPage(defaultPageForRole());
+
+      toast("Login successful.");
+    }
+
+    function logout() {
+      currentUser = null;
+      currentPage = null;
+
+      $("#appPage").classList.add("hidden");
+      $("#loginPage").classList.remove("hidden");
+      $("#loginForm").reset();
+
+      toast("Logged out successfully.");
+    }
+
+    function defaultPageForRole() {
+      if (!currentUser) return "dashboard";
+      return currentUser.role === "tanod" ? "fieldDashboard" : "dashboard";
+    }
+
+    function allowedPage(pageId) {
+      const page = NAV_ITEMS.find(item => item.id === pageId);
+      return page && currentUser && page.roles.includes(currentUser.role);
+    }
+
+    function renderNav() {
+      const nav = $("#nav");
+      nav.innerHTML = "";
+
+      NAV_ITEMS
+        .filter(item => item.roles.includes(currentUser.role))
+        .forEach(item => {
+          const btn = document.createElement("button");
+
+          btn.innerHTML = `<span>${item.icon}</span> ${item.label}`;
+          btn.dataset.page = item.id;
+          btn.onclick = () => showPage(item.id);
+
+          nav.appendChild(btn);
+        });
+    }
+
+    function setActiveNav(pageId) {
+      document.querySelectorAll("#nav button").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.page === pageId);
+      });
+    }
+
+    function toggleSidebar() {
+      $("#sidebar").classList.toggle("open");
+    }
+
+    function showPage(pageId) {
+      if (!allowedPage(pageId)) {
+        toast("Access denied for this role.");
+        return;
+      }
+
+      currentPage = pageId;
+      setActiveNav(pageId);
+      $("#sidebar").classList.remove("open");
+
+      const pages = {
+        dashboard: {
+          title: "Business Intelligence Dashboard",
+          subtitle: "Monthly-filtered incident analytics for Barangay 179, Amparo, Caloocan City.",
+          render: renderDashboard
+        },
+        fieldDashboard: {
+          title: "Field User Dashboard",
+          subtitle: "Same barangay risk map and patrol recommendations seen by other authorized users.",
+          render: renderFieldDashboard
+        },
+        incidents: {
+          title: "Incident Record Management",
+          subtitle: "Administrator module for adding, editing, deleting, searching, and filtering incident records.",
+          render: renderIncidentManagement
+        },
+        map: {
+          title: "Barangay Amparo Risk Map",
+          subtitle: "Barangay-focused barrier map with on-point high-risk hotspot overlays.",
+          render: renderMapPage
+        },
+        cart: {
+          title: "CART Decision Tree Analytics",
+          subtitle: "Simulated CART-based risk classification using incident patterns and location history.",
+          render: renderCartPage
+        },
+        patrol: {
+          title: "Patrol Decision Support",
+          subtitle: "Priority patrol recommendations based on risk level, recurrence, and incident timing.",
+          render: renderPatrolPage
+        },
+        reports: {
+          title: "Reports Module",
+          subtitle: "Printable summaries and export-ready reports for barangay officials.",
+          render: renderReportsPage
+        },
+        users: {
+          title: "User Management",
+          subtitle: "Administrator-only module for managing role-based system users.",
+          render: renderUsersPage
+        },
+        settings: {
+          title: "System Settings",
+          subtitle: "Prototype configuration for barangay boundary, thresholds, and dashboard behavior.",
+          render: renderSettingsPage
+        }
+      };
+
+      const page = pages[pageId];
+
+      $("#pageTitle").textContent = page.title;
+      $("#pageSubtitle").textContent = page.subtitle;
+      page.render();
+    }
+
+    function countBy(items, keyFn) {
+      return items.reduce((acc, item) => {
+        const key = keyFn(item);
+        acc[key] = (acc[key] || 0) + 1;
+        return acc;
+      }, {});
+    }
+
+    function mostCommon(items, keyFn) {
+      const counts = countBy(items, keyFn);
+      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      return sorted[0] || ["None", 0];
+    }
+
+    function getAvailableMonths() {
+      const months = [
+        ...new Set(
+          getIncidents().map(item => item.date.slice(0, 7))
+        )
+      ].sort((a, b) => b.localeCompare(a));
+
+      return months.length ? months : [selectedAnalyticsMonth];
+    }
+
+    function formatMonthLabel(monthValue) {
+      const [year, month] = monthValue.split("-");
+      const date = new Date(Number(year), Number(month) - 1, 1);
+
+      return date.toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric"
+      });
+    }
+
+    function getMonthlyIncidents(monthValue = selectedAnalyticsMonth) {
+      return getIncidents().filter(item => item.date.startsWith(monthValue));
+    }
+
+    function monthSelectHTML(location = "dashboard") {
+      const months = getAvailableMonths();
+
+      return `
+        <select onchange="setAnalyticsMonth(this.value, '${location}')">
+          ${months.map(month => `
+            <option value="${month}" ${month === selectedAnalyticsMonth ? "selected" : ""}>
+              ${formatMonthLabel(month)}
+            </option>
+          `).join("")}
+        </select>
+      `;
+    }
+
+    function setAnalyticsMonth(monthValue, location = currentPage) {
+      selectedAnalyticsMonth = monthValue;
+
+      if (location === "map" || currentPage === "map") {
+        renderMapPage();
+      } else if (currentPage === "dashboard") {
+        renderDashboard();
+      } else if (currentPage === "fieldDashboard") {
+        renderFieldDashboard();
+      } else if (currentPage === "patrol") {
+        renderPatrolPage();
+      } else if (currentPage === "reports") {
+        renderReportsPage();
+      } else {
+        renderDashboard();
+      }
+
+      toast(`Analytics updated for ${formatMonthLabel(monthValue)}.`);
+    }
+
+    function getAnalytics(monthValue = selectedAnalyticsMonth) {
+      const incidents = getMonthlyIncidents(monthValue);
+      const allIncidents = getIncidents();
+
+      const latestDateInMonth =
+        incidents.map(item => item.date).sort().reverse()[0] || `${monthValue}-01`;
+
+      const typeTop = mostCommon(incidents, item => item.type);
+
+      const locationTop = mostCommon(
+        incidents.filter(item => item.danger >= 2),
+        item => item.location
+      );
+
+      const peakHour = mostCommon(
+        incidents,
+        item => item.time.split(":")[0] + ":00"
+      );
+
+      const levelCounts = countBy(incidents, item => item.danger);
+      const highRiskCount = levelCounts[3] || 0;
+
+      const previousMonths = getAvailableMonths().filter(month => month < monthValue);
+      const previousMonth = previousMonths.sort((a, b) => b.localeCompare(a))[0];
+
+      const previousCount = previousMonth
+        ? allIncidents.filter(item => item.date.startsWith(previousMonth)).length
+        : 0;
+
+      let monthlyChange = "No previous month comparison available.";
+
+      if (previousMonth) {
+        const difference = incidents.length - previousCount;
+        const direction =
+          difference > 0
+            ? "higher than"
+            : difference < 0
+              ? "lower than"
+              : "the same as";
+
+        monthlyChange = `${Math.abs(difference)} incident/s ${direction} ${formatMonthLabel(previousMonth)}.`;
+      }
+
+      return {
+        total: incidents.length,
+        today: incidents.filter(item => item.date === latestDateInMonth).length,
+        month: incidents.length,
+        commonType: typeTop[0],
+        highRiskLocation: locationTop[0],
+        peakTime: peakHour[0],
+        priorityZones: [
+          ...new Set(
+            incidents
+              .filter(item => item.danger === 3)
+              .map(item => item.location)
+          )
+        ].length,
+        trend:
+          highRiskCount >= 3
+            ? "High-risk areas require increased evening patrol visibility."
+            : incidents.length === 0
+              ? "No incident records found for this selected month."
+              : "Risk trend is currently manageable for this selected month.",
+        predictedSummary: `${highRiskCount} record/s show Level 3 high-risk indicators for ${formatMonthLabel(monthValue)}.`,
+        monthlyChange,
+        selectedMonthLabel: formatMonthLabel(monthValue)
+      };
+    }
+
+    function statCard(label, value, note) {
+      return `
+        <div class="card stat-card">
+          <div class="stat-label">${label}</div>
+          <div class="stat-value">${value}</div>
+          <div class="stat-note">${note}</div>
+        </div>
+      `;
+    }
+
+    function renderEmptyState(message) {
+      return `
+        <div style="
+          padding: 28px;
+          border-radius: 16px;
+          background: #f8fafc;
+          border: 1px dashed #cbd5e1;
+          color: #64748b;
+          text-align: center;
+        ">
+          ${message}
+        </div>
+      `;
+    }
+
+    function renderDashboard() {
+      const a = getAnalytics(selectedAnalyticsMonth);
+      const incidents = getMonthlyIncidents(selectedAnalyticsMonth);
+
+      $("#content").innerHTML = `
+        <div class="loading-line"></div>
+
+        <div class="card no-print" style="margin-bottom:18px;">
+          <div class="section-title">
+            <div>
+              <h3>Monthly Analytics Control</h3>
+              <p class="stat-note">
+                All dashboard cards, charts, hotspot table, patrol priorities, and map data use the same selected month.
+              </p>
+            </div>
+            <div style="min-width:190px;">
+              ${monthSelectHTML("dashboard")}
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-4">
+          ${statCard("Monthly Incidents", a.total, `Total recorded incidents for ${a.selectedMonthLabel}.`)}
+          ${statCard("Latest Active Day", a.today, "Incidents recorded on the latest date available in this month.")}
+          ${statCard("Month Change", a.monthlyChange, "Comparison against the previous month with records.")}
+          ${statCard("Priority Zones", a.priorityZones, "High-risk locations that need stronger patrol visibility.")}
+        </div>
+
+        <br>
+
+        <div class="grid grid-4">
+          ${statCard("Common Incident", a.commonType, "Most frequently reported incident category for this month.")}
+          ${statCard("Highest-Risk Area", a.highRiskLocation, "Location with repeated moderate or high-risk reports.")}
+          ${statCard("Peak Time", a.peakTime, "Most common incident hour in this selected month.")}
+          ${statCard("Predicted Risk", a.predictedSummary, "CART-inspired monthly risk summary.")}
+        </div>
+
+        <br>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="chart-head">
+              <h3>Incident Types</h3>
+              ${monthSelectHTML("dashboard")}
+            </div>
+            ${
+              incidents.length
+                ? renderBarChart(countBy(incidents, item => item.type))
+                : renderEmptyState("No incident type data for this month.")
+            }
+          </div>
+
+          <div class="card">
+            <div class="chart-head">
+              <h3>Danger Level Distribution</h3>
+              ${monthSelectHTML("dashboard")}
+            </div>
+            ${
+              incidents.length
+                ? renderPieChart(incidents)
+                : renderEmptyState("No danger level data for this month.")
+            }
+          </div>
+
+          <div class="card">
+            <div class="chart-head">
+              <h3>Crime Trend Over Time</h3>
+              ${monthSelectHTML("dashboard")}
+            </div>
+            ${
+              incidents.length
+                ? renderLineChart(incidents)
+                : renderEmptyState("No trend data for this month.")
+            }
+          </div>
+
+          <div class="card">
+            <div class="chart-head">
+              <h3>Peak Incident Hours</h3>
+              ${monthSelectHTML("dashboard")}
+            </div>
+            ${
+              incidents.length
+                ? renderBarChart(countBy(incidents, item => item.time.split(":")[0] + ":00"))
+                : renderEmptyState("No time-based data for this month.")
+            }
+          </div>
+        </div>
+
+        <br>
+
+        <div class="grid grid-2">
+          <div class="card clean-card">
+            <div class="section-title">
+              <h3>Recent Incident Table</h3>
+              <span>${a.selectedMonthLabel}</span>
+            </div>
+
+            <div class="table-wrap">
+              ${
+                incidents.length
+                  ? renderIncidentTable(
+                      incidents
+                        .slice()
+                        .sort((x, y) => y.date.localeCompare(x.date))
+                        .slice(0, 6),
+                      false
+                    )
+                  : renderEmptyState("No recent incidents for this month.")
+              }
+            </div>
+          </div>
+
+          <div class="card clean-card">
+            <div class="section-title">
+              <h3>Top Hotspot Areas</h3>
+              <span>${a.selectedMonthLabel}</span>
+            </div>
+
+            ${
+              incidents.length
+                ? renderHotspotRanking(incidents)
+                : renderEmptyState("No hotspot ranking for this month.")
+            }
+          </div>
+        </div>
+
+        <br>
+
+        <div class="card">
+          <div class="section-title">
+            <h3>Risk Trend Summary</h3>
+            <span>BI Interpretation</span>
+          </div>
+
+          <p class="stat-note">
+            ${a.trend} ${a.predictedSummary}
+            The prototype analyzes incident patterns by location, date, time, incident type, recurrence, and risk level only.
+            It does not identify, accuse, or profile specific individuals.
+          </p>
+        </div>
+      `;
+    }
+
+    function renderFieldDashboard() {
+      const recommendations = generatePatrolRecommendations().slice(0, 3);
+
+      $("#content").innerHTML = `
+        <div class="card no-print" style="margin-bottom:18px;">
+          <div class="section-title">
+            <div>
+              <h3>Shared Field View</h3>
+              <p class="stat-note">
+                The Field User sees the same month-based hotspot data and barangay map view used by Admin and Decision-Makers.
+              </p>
+            </div>
+            <div style="min-width:190px;">
+              ${monthSelectHTML("fieldDashboard")}
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-3">
+          ${statCard("Assigned Focus", "Hotspots", "View-only patrol guidance for field monitoring.")}
+          ${statCard("Warning Zones", recommendations.length, "Priority zones requiring tanod attention.")}
+          ${statCard("Main Patrol Time", "7 PM – 11 PM", "Based on repeated evening incident patterns.")}
+        </div>
+
+        <br>
+
+        <div class="grid grid-2">
+          <div class="card recommendation">
+            <div class="section-title">
+              <h3>Immediate Patrol Priorities</h3>
+              <span>Field View</span>
+            </div>
+
+            ${recommendations.map(item => renderRecommendationCard(item, false)).join("")}
+          </div>
+
+          <div class="card">
+            <div class="section-title">
+              <h3>Field User Access</h3>
+              <span>Limited View</span>
+            </div>
+
+            <p class="stat-note">
+              Barangay tanods can view hotspot maps, assigned patrol areas, warning zones,
+              and patrol recommendations. This account cannot add, edit, delete, export,
+              or manage records.
+            </p>
+
+            <br>
+
+            <button class="btn btn-primary" onclick="showPage('map')">Open Barangay Risk Map</button>
+            <button class="btn btn-warning" onclick="showPage('patrol')">View Patrol Support</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderBarChart(counts) {
+      const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      const max = Math.max(...entries.map(item => item[1]), 1);
+
+      return `
+        <div class="bar-list">
+          ${entries.map(([label, value]) => `
+            <div class="bar-row">
+              <strong>${label}</strong>
+
+              <div class="bar-track">
+                <div class="bar-fill" style="width:${(value / max) * 100}%"></div>
+              </div>
+
+              <span>${value}</span>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function renderPieChart(incidents) {
+      const total = incidents.length || 1;
+
+      const l1 = incidents.filter(item => item.danger === 1).length;
+      const l2 = incidents.filter(item => item.danger === 2).length;
+      const l3 = incidents.filter(item => item.danger === 3).length;
+
+      const p1 = (l1 / total) * 100;
+      const p2 = (l2 / total) * 100;
+
+      return `
+        <div
+          class="pie"
+          style="background: conic-gradient(
+            #16a34a 0 ${p1}%,
+            #eab308 ${p1}% ${p1 + p2}%,
+            #dc2626 ${p1 + p2}% 100%
+          );"
+        ></div>
+
+        <div class="legend">
+          <span class="legend-item"><span class="dot green-dot"></span> Level 1: ${l1}</span>
+          <span class="legend-item"><span class="dot yellow-dot"></span> Level 2: ${l2}</span>
+          <span class="legend-item"><span class="dot red-dot"></span> Level 3: ${l3}</span>
+        </div>
+      `;
+    }
+
+    function renderLineChart(incidents) {
+      const byDate = countBy(incidents, item => item.date);
+      const entries = Object.entries(byDate).sort((a, b) => a[0].localeCompare(b[0]));
+
+      const values = entries.map(item => item[1]);
+      const max = Math.max(...values, 1);
+
+      const w = 640;
+      const h = 210;
+      const pad = 28;
+      const step = entries.length <= 1 ? 1 : (w - pad * 2) / (entries.length - 1);
+
+      const points = entries.map((entry, i) => {
+        const x = pad + i * step;
+        const y = h - pad - (entry[1] / max) * (h - pad * 2);
+
+        return `${x},${y}`;
+      }).join(" ");
+
+      return `
+        <svg viewBox="0 0 ${w} ${h}" width="100%" height="230">
+          <line x1="${pad}" y1="${h - pad}" x2="${w - pad}" y2="${h - pad}" stroke="#e5e7eb" stroke-width="2" />
+          <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${h - pad}" stroke="#e5e7eb" stroke-width="2" />
+
+          <polyline
+            points="${points}"
+            fill="none"
+            stroke="#2563eb"
+            stroke-width="5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+
+          ${entries.map((entry, i) => {
+            const x = pad + i * step;
+            const y = h - pad - (entry[1] / max) * (h - pad * 2);
+
+            return `
+              <circle cx="${x}" cy="${y}" r="6" fill="#06b6d4" />
+              <text x="${x}" y="${h - 5}" font-size="11" text-anchor="middle" fill="#64748b">
+                ${entry[0].slice(5)}
+              </text>
+            `;
+          }).join("")}
+        </svg>
+      `;
+    }
+
+    function renderHotspotRanking(sourceIncidents = null) {
+      const incidents = sourceIncidents || getMonthlyIncidents(selectedAnalyticsMonth);
+      const counts = countBy(incidents, item => item.location);
+
+      const rows = Object.entries(counts)
+        .map(([location, count]) => {
+          const matches = incidents.filter(item => item.location === location);
+          const maxDanger = Math.max(...matches.map(item => item.danger));
+          const topType = mostCommon(matches, item => item.type)[0];
+
+          return {
+            location,
+            count,
+            maxDanger,
+            topType
+          };
+        })
+        .sort((a, b) => b.maxDanger - a.maxDanger || b.count - a.count)
+        .slice(0, 6);
+
+      return `
+        <div class="hotspot-rank-list">
+          ${rows.map((row, index) => `
+            <div class="hotspot-rank-item">
+              <div class="hotspot-rank-head">
+                <div class="hotspot-rank-title">
+                  #${index + 1} ${row.location}
+                </div>
+
+                <span class="pill ${dangerInfo(row.maxDanger).className}">
+                  ${dangerInfo(row.maxDanger).label}
+                </span>
+              </div>
+
+              <div class="hotspot-rank-desc">
+                ${row.count} recorded incident/s. Recommended action:
+                ${dangerInfo(row.maxDanger).action}.
+              </div>
+
+              <div class="hotspot-rank-meta">
+                <span class="pill status-open">${row.topType}</span>
+                <span class="pill ${dangerInfo(row.maxDanger).className}">
+                  ${row.count} hotspot record/s
+                </span>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function renderIncidentTable(records, includeActions = true) {
+      return `
+        <table>
+          <thead>
+            <tr>
+              <th>Incident ID</th>
+              <th>Type</th>
+              <th>Date / Time</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>Danger Level</th>
+              <th>Recommended Action</th>
+              ${includeActions ? "<th>Actions</th>" : ""}
+            </tr>
+          </thead>
+
+          <tbody>
+            ${records.map(item => `
+              <tr>
+                <td><strong>${item.id}</strong></td>
+                <td>${item.type}</td>
+                <td>${item.date}<br>${item.time}</td>
+                <td>${item.location}</td>
+                <td><span class="pill ${statusClass(item.status)}">${item.status}</span></td>
+                <td><span class="pill ${dangerInfo(Number(item.danger)).className}">${dangerInfo(Number(item.danger)).label}</span></td>
+                <td>${item.action}</td>
+
+                ${includeActions ? `
+                  <td>
+                    <div class="actions">
+                      <button class="btn btn-light" onclick="editIncident('${item.id}')">Edit</button>
+                      <button class="btn btn-danger" onclick="deleteIncident('${item.id}')">Delete</button>
+                    </div>
+                  </td>
+                ` : ""}
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderIncidentManagement() {
+      const incidents = getIncidents();
+
+      $("#content").innerHTML = `
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="section-title">
+              <h3 id="incidentFormTitle">Add New Incident</h3>
+              <span>Administrator Access</span>
+            </div>
+
+            <form id="incidentForm" onsubmit="saveIncidentForm(event)">
+              <div class="form-grid">
+                <div class="field">
+                  <label>Incident Type</label>
+                  <select id="incidentType" required>
+                    <option>Theft</option>
+                    <option>Physical Injury</option>
+                    <option>Noise Complaint</option>
+                    <option>Vandalism</option>
+                    <option>Suspicious Activity</option>
+                    <option>Traffic Obstruction</option>
+                    <option>Curfew Violation</option>
+                    <option>Domestic Disturbance</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label>Date</label>
+                  <input id="incidentDate" type="date" required />
+                </div>
+
+                <div class="field">
+                  <label>Time</label>
+                  <input id="incidentTime" type="time" required />
+                </div>
+
+                <div class="field">
+                  <label>Location / Purok / Street</label>
+                  <input id="incidentLocation" type="text" placeholder="Purok 3 - Amparo Main Road" required />
+                </div>
+
+                <div class="field">
+                  <label>Reported By</label>
+                  <input id="reportedBy" type="text" placeholder="Tanod Patrol A" required />
+                </div>
+
+                <div class="field">
+                  <label>Status</label>
+                  <select id="incidentStatus" required>
+                    <option>Open</option>
+                    <option>Monitoring</option>
+                    <option>Resolved</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label>Danger Level</label>
+                  <select id="dangerLevel" required>
+                    <option value="1">Level 1 — Low Danger</option>
+                    <option value="2">Level 2 — Moderate Danger</option>
+                    <option value="3">Level 3 — High Crime / Considerable Danger</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label>Latitude</label>
+                  <input id="incidentLat" type="number" step="0.000001" value="14.756900" required />
+                </div>
+
+                <div class="field">
+                  <label>Longitude</label>
+                  <input id="incidentLng" type="number" step="0.000001" value="121.049800" required />
+                </div>
+
+                <div class="field wide">
+                  <label>Description</label>
+                  <textarea id="incidentDescription" rows="3" placeholder="Describe the incident pattern or report details." required></textarea>
+                </div>
+
+                <div class="field wide">
+                  <label>Recommended Action</label>
+                  <textarea id="recommendedAction" rows="2" placeholder="Priority patrol, scheduled monitoring, normal monitoring..." required></textarea>
+                </div>
+              </div>
+
+              <br>
+
+              <div class="actions">
+                <button class="btn btn-primary" type="submit">Save Incident</button>
+                <button class="btn btn-light" type="button" onclick="resetIncidentForm()">Clear Form</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="card">
+            <div class="section-title">
+              <h3>Incident Record Controls</h3>
+              <span>Search and Filter</span>
+            </div>
+
+            <div class="filters" style="grid-template-columns:1fr;">
+              <input id="searchIncident" type="text" placeholder="Search by ID, type, location, description..." oninput="filterIncidentTable()" />
+
+              <select id="filterType" onchange="filterIncidentTable()">
+                <option value="">All Incident Types</option>
+                ${[...new Set(incidents.map(item => item.type))].map(type => `<option>${type}</option>`).join("")}
+              </select>
+
+              <select id="filterDanger" onchange="filterIncidentTable()">
+                <option value="">All Danger Levels</option>
+                <option value="1">Level 1 — Low Danger</option>
+                <option value="2">Level 2 — Moderate Danger</option>
+                <option value="3">Level 3 — High Crime / Considerable Danger</option>
+              </select>
+
+              <input id="filterDate" type="date" onchange="filterIncidentTable()" />
+            </div>
+
+            <p class="stat-note">
+              Only the Administrator can add, edit, and delete records.
+              Decision-Makers and Field Users have view-only access to their allowed modules.
+            </p>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="card clean-card">
+          <div class="section-title">
+            <h3>Incident Records</h3>
+            <span>${incidents.length} total records</span>
+          </div>
+
+          <div id="incidentTableWrap" class="table-wrap">
+            ${renderIncidentTable(incidents, true)}
+          </div>
+        </div>
+      `;
+
+      resetIncidentForm();
+    }
+
+    function saveIncidentForm(event) {
+      event.preventDefault();
+
+      const records = getIncidents();
+
+      const payload = {
+        id: editingIncidentId || `INC-2026-${String(records.length + 1).padStart(3, "0")}`,
+        type: $("#incidentType").value,
+        date: $("#incidentDate").value,
+        time: $("#incidentTime").value,
+        location: $("#incidentLocation").value,
+        description: $("#incidentDescription").value,
+        reportedBy: $("#reportedBy").value,
+        status: $("#incidentStatus").value,
+        danger: Number($("#dangerLevel").value),
+        lat: Number($("#incidentLat").value),
+        lng: Number($("#incidentLng").value),
+        action: $("#recommendedAction").value
+      };
+
+      if (editingIncidentId) {
+        const index = records.findIndex(item => item.id === editingIncidentId);
+        records[index] = payload;
+        toast("Incident updated successfully.");
+      } else {
+        records.push(payload);
+        toast("Incident added successfully.");
+      }
+
+      saveIncidents(records);
+      editingIncidentId = null;
+      renderIncidentManagement();
+    }
+
+    function resetIncidentForm() {
+      editingIncidentId = null;
+
+      const form = $("#incidentForm");
+      if (!form) return;
+
+      form.reset();
+
+      $("#incidentDate").value = "2026-06-07";
+      $("#incidentTime").value = "20:00";
+      $("#incidentLat").value = BRGY_CENTER.lat;
+      $("#incidentLng").value = BRGY_CENTER.lng;
+      $("#recommendedAction").value = "Scheduled patrol and risk monitoring";
+      $("#incidentFormTitle").textContent = "Add New Incident";
+    }
+
+    function editIncident(id) {
+      const item = getIncidents().find(record => record.id === id);
+
+      if (!item) return;
+
+      editingIncidentId = id;
+
+      $("#incidentFormTitle").textContent = `Edit Incident — ${id}`;
+      $("#incidentType").value = item.type;
+      $("#incidentDate").value = item.date;
+      $("#incidentTime").value = item.time;
+      $("#incidentLocation").value = item.location;
+      $("#incidentDescription").value = item.description;
+      $("#reportedBy").value = item.reportedBy;
+      $("#incidentStatus").value = item.status;
+      $("#dangerLevel").value = item.danger;
+      $("#incidentLat").value = item.lat;
+      $("#incidentLng").value = item.lng;
+      $("#recommendedAction").value = item.action;
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    function deleteIncident(id) {
+      const confirmed = confirm(`Delete incident record ${id}?`);
+
+      if (!confirmed) return;
+
+      const records = getIncidents().filter(item => item.id !== id);
+
+      saveIncidents(records);
+      toast("Incident deleted.");
+      renderIncidentManagement();
+    }
+
+    function filterIncidentTable() {
+      const search = $("#searchIncident").value.toLowerCase();
+      const type = $("#filterType").value;
+      const danger = $("#filterDanger").value;
+      const date = $("#filterDate").value;
+
+      const filtered = getIncidents().filter(item => {
+        const text = JSON.stringify(item).toLowerCase();
+
+        return (
+          (!search || text.includes(search)) &&
+          (!type || item.type === type) &&
+          (!danger || String(item.danger) === danger) &&
+          (!date || item.date === date)
+        );
+      });
+
+      $("#incidentTableWrap").innerHTML = renderIncidentTable(filtered, true);
+    }
+
+    function buildHotspotGroups(sourceIncidents) {
+      const incidents = sourceIncidents || [];
+      const groups = {};
+
+      incidents.forEach(item => {
+        const key = item.location;
+
+        if (!groups[key]) {
+          groups[key] = {
+            location: item.location,
+            lat: item.lat,
+            lng: item.lng,
+            count: 0,
+            maxDanger: item.danger,
+            incidents: []
+          };
+        }
+
+        groups[key].count += 1;
+        groups[key].maxDanger = Math.max(groups[key].maxDanger, item.danger);
+        groups[key].incidents.push(item);
+      });
+
+      return Object.values(groups)
+        .map(group => ({
+          ...group,
+          patchSize:
+            group.maxDanger === 3
+              ? 84
+              : group.maxDanger === 2
+                ? 68
+                : 54
+        }))
+        .sort((a, b) => b.maxDanger - a.maxDanger || b.count - a.count);
+    }
+
+    function renderMapPage() {
+      const incidents = getMonthlyIncidents(selectedAnalyticsMonth);
+
+      $("#content").innerHTML = `
+        <div class="card no-print" style="margin-bottom:18px;">
+          <div class="section-title">
+            <div>
+              <h3>Shared Barangay Risk Map Control</h3>
+              <p class="stat-note">
+                Admin, Decision-Maker, and Field User all see the same map, same month, same hotspot coordinates, and same barangay boundary.
+              </p>
+            </div>
+            <div style="min-width:190px;">
+              ${monthSelectHTML("map")}
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-3">
+          <div class="card">
+            <div class="stat-label">Map Focus</div>
+            <div class="stat-value" style="font-size:24px;">Barangay 179</div>
+            <p class="stat-note">Default center is set to Barangay 179, Amparo, Caloocan City.</p>
+          </div>
+
+          <div class="card">
+            <div class="stat-label">Barrier Mode</div>
+            <div class="stat-value" style="font-size:24px;">Active</div>
+            <p class="stat-note">Full Barangay Amparo barrier, outside-area mask, warning signs, and strict API drag bounds.</p>
+          </div>
+
+          <div class="card">
+            <div class="stat-label">Visible Hotspots</div>
+            <div class="stat-value" style="font-size:24px;">${buildHotspotGroups(incidents).length}</div>
+            <p class="stat-note">Hotspot zones are based on the selected month and exact incident coordinates.</p>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="card clean-card">
+          <div class="section-title">
+            <h3>Barangay Amparo / Barangay 179 Risk Map</h3>
+            <span>${formatMonthLabel(selectedAnalyticsMonth)}</span>
+          </div>
+
+          <div class="map-shell">
+            <div id="googleMap"></div>
+
+            <div id="fallbackMap">
+              <iframe
+                class="google-iframe"
+                title="Google Maps view of Barangay 179 Amparo Caloocan City"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps?q=Barangay%20179%20Amparo%20Caloocan%20City&z=16&output=embed">
+              </iframe>
+
+              <div id="fallbackBoundary">
+                ${renderFallbackBoundary()}
+              </div>
+
+              <div class="map-label">
+                <strong>Barangay 179 / Amparo Boundary</strong>
+                <span>
+                  Fallback map preview with a full Barangay Amparo boundary barrier and visible warning signs.
+                  Add Google Maps API key to activate strict bounds, polygon mask, and exact coordinate overlays.
+                </span>
+              </div>
+
+              <div class="api-note">
+                Replace <strong>YOUR_GOOGLE_MAPS_API_KEY_HERE</strong> to activate full Google Maps API heatmap and strict barangay drag barrier.
+              </div>
+
+              <div id="fallbackMarkers"></div>
+
+              <div class="map-command-badge">
+                <strong>Barangay 179 / Amparo Operational View</strong>
+                Filtered hotspot view with a full barangay boundary barrier, numbered zone markers,
+                and red warning signs on high-risk areas.
+              </div>
+            </div>
+          </div>
+
+          <br>
+
+          <div class="legend">
+            <span class="legend-item"><span class="dot green-dot"></span> Level 1 — Low Danger</span>
+            <span class="legend-item"><span class="dot yellow-dot"></span> Level 2 — Moderate Danger</span>
+            <span class="legend-item"><span class="dot red-dot"></span> Level 3 — High Risk / Considerable Danger</span>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="card clean-card">
+          <div class="section-title">
+            <h3>Map Hotspot List</h3>
+            <span>${formatMonthLabel(selectedAnalyticsMonth)}</span>
+          </div>
+          ${incidents.length ? renderHotspotRanking(incidents) : renderEmptyState("No hotspot records for this selected month.")}
+        </div>
+      `;
+
+      renderFallbackMapMarkers();
+      tryDrawGoogleMap();
+    }
+
+    function projectLatLngToFallbackPoint(lat, lng) {
+      const west = BRGY_RESTRICTION_BOUNDS.west;
+      const east = BRGY_RESTRICTION_BOUNDS.east;
+      const north = BRGY_RESTRICTION_BOUNDS.north;
+      const south = BRGY_RESTRICTION_BOUNDS.south;
+
+      const x = ((lng - west) / (east - west)) * 100;
+      const y = ((north - lat) / (north - south)) * 100;
+
+      return {
+        x: Math.max(2, Math.min(98, x)),
+        y: Math.max(2, Math.min(98, y))
+      };
+    }
+
+    function renderFallbackBoundary() {
+      const boundaryPoints = BRGY_BOUNDARY.map(point => {
+        return projectLatLngToFallbackPoint(point.lat, point.lng);
+      });
+
+      const polygonPoints = boundaryPoints
+        .map(point => `${point.x.toFixed(2)},${point.y.toFixed(2)}`)
+        .join(" ");
+
+      const boundaryPath = boundaryPoints
+        .map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(2)} ${point.y.toFixed(2)}`)
+        .join(" ") + " Z";
+
+      return `
+        <svg class="fallback-boundary-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path
+            d="M0 0 H100 V100 H0 Z ${boundaryPath}"
+            fill="rgba(15, 23, 42, 0.28)"
+            fill-rule="evenodd"
+          />
+
+          <polygon
+            points="${polygonPoints}"
+            fill="rgba(255,255,255,0.02)"
+            stroke="#111827"
+            stroke-width="2.1"
+            stroke-linejoin="round"
+          />
+        </svg>
+
+        <div class="client-boundary-label">Barangay Amparo Boundary</div>
+      `;
+    }
+
+    function renderFallbackMapMarkers() {
+      const container = $("#fallbackMarkers");
+
+      if (!container) return;
+
+      const incidents = getMonthlyIncidents(selectedAnalyticsMonth);
+      const hotspotGroups = buildHotspotGroups(incidents);
+
+      container.innerHTML = `
+        ${hotspotGroups.map((hotspot, index) => {
+          const point = projectLatLngToFallbackPoint(hotspot.lat, hotspot.lng);
+          const level = Number(hotspot.maxDanger);
+
+          return `
+            <div class="fallback-risk-zone level${level}" style="left:${point.x.toFixed(2)}%; top:${point.y.toFixed(2)}%;"></div>
+
+            <div class="fallback-alert-marker level${level}" style="left:${point.x.toFixed(2)}%; top:${point.y.toFixed(2)}%;">
+              <div class="alert-head"></div>
+              <div class="alert-stem"></div>
+            </div>
+
+            <div class="fallback-zone-number" style="left:${point.x.toFixed(2)}%; top:${point.y.toFixed(2)}%;">
+              ${index + 1}
+            </div>
+          `;
+        }).join("")}
+      `;
+    }
+
+    function tryDrawGoogleMap() {
+      if (!window.google || !window.google.maps || !$("#googleMap")) return;
+
+      const fallbackEl = $("#fallbackMap");
+
+      const restrictionBounds = new google.maps.LatLngBounds(
+        { lat: BRGY_RESTRICTION_BOUNDS.south, lng: BRGY_RESTRICTION_BOUNDS.west },
+        { lat: BRGY_RESTRICTION_BOUNDS.north, lng: BRGY_RESTRICTION_BOUNDS.east }
+      );
+
+      const map = new google.maps.Map($("#googleMap"), {
+        center: BRGY_CENTER,
+        zoom: 17,
+        minZoom: 16,
+        maxZoom: 20,
+        restriction: {
+          latLngBounds: restrictionBounds,
+          strictBounds: true
+        },
+        mapTypeId: "roadmap",
+        gestureHandling: "greedy",
+        streetViewControl: false,
+        fullscreenControl: true,
+        mapTypeControl: false,
+        clickableIcons: false,
+        styles: [
+          { featureType: "poi", stylers: [{ visibility: "off" }] },
+          { featureType: "transit", stylers: [{ visibility: "off" }] },
+          { featureType: "administrative.locality", stylers: [{ visibility: "off" }] },
+          { featureType: "road", elementType: "labels", stylers: [{ visibility: "simplified" }] },
+          { featureType: "landscape", stylers: [{ saturation: -10 }, { lightness: 12 }] }
+        ]
+      });
+
+      googleMapInstance = map;
+      map.fitBounds(restrictionBounds);
+      map.setZoom(17);
+
+      const outsideMask = [
+        { lat: BRGY_RESTRICTION_BOUNDS.north, lng: BRGY_RESTRICTION_BOUNDS.west },
+        { lat: BRGY_RESTRICTION_BOUNDS.north, lng: BRGY_RESTRICTION_BOUNDS.east },
+        { lat: BRGY_RESTRICTION_BOUNDS.south, lng: BRGY_RESTRICTION_BOUNDS.east },
+        { lat: BRGY_RESTRICTION_BOUNDS.south, lng: BRGY_RESTRICTION_BOUNDS.west }
+      ];
+
+      new google.maps.Polygon({
+        paths: [outsideMask, BRGY_BOUNDARY.slice().reverse()],
+        strokeOpacity: 0,
+        fillColor: "#0f172a",
+        fillOpacity: 0.36,
+        clickable: false,
+        map
+      });
+
+      new google.maps.Polygon({
+        paths: BRGY_BOUNDARY,
+        strokeColor: "#111827",
+        strokeOpacity: 1,
+        strokeWeight: 8,
+        fillColor: "#0f172a",
+        fillOpacity: 0.04,
+        clickable: false,
+        map
+      });
+
+      new google.maps.Polygon({
+        paths: BRGY_BOUNDARY,
+        strokeColor: "#06b6d4",
+        strokeOpacity: 1,
+        strokeWeight: 3,
+        fillColor: "#06b6d4",
+        fillOpacity: 0.07,
+        clickable: false,
+        map
+      });
+
+      createBoundaryLabelOverlay(
+        map,
+        new google.maps.LatLng(BRGY_CENTER.lat + 0.0046, BRGY_CENTER.lng),
+        "Client Area: Barangay Amparo"
+      );
+
+      map.addListener("dragend", () => {
+        if (!restrictionBounds.contains(map.getCenter())) {
+          map.panTo(BRGY_CENTER);
+        }
+      });
+
+      const incidents = getMonthlyIncidents(selectedAnalyticsMonth);
+      const hotspots = buildHotspotGroups(incidents);
+      const info = new google.maps.InfoWindow();
+
+      hotspots.forEach((hotspot, index) => {
+        const position = new google.maps.LatLng(hotspot.lat, hotspot.lng);
+        const danger = Number(hotspot.maxDanger);
+        const d = dangerInfo(danger);
+
+        createRiskZoneOverlay(map, position, danger);
+        createAlertMarkerOverlay(map, position, danger, index + 1);
+
+        const marker = new google.maps.Marker({
+          position,
+          map,
+          title: hotspot.location,
+          icon: createTransparentMarkerIcon(),
+          zIndex: 1200 + index
+        });
+
+        new google.maps.Circle({
+          center: position,
+          radius: danger === 3 ? 105 : danger === 2 ? 78 : 50,
+          strokeColor: d.color,
+          strokeOpacity: danger === 3 ? 0.72 : 0.50,
+          strokeWeight: danger === 3 ? 2 : 1,
+          fillColor: d.color,
+          fillOpacity: danger === 3 ? 0.10 : 0.06,
+          clickable: false,
+          map
+        });
+
+        marker.addListener("click", () => {
+          const incidentList = hotspot.incidents
+            .map(item => `${item.type} • ${item.date} ${item.time}`)
+            .join("<br>");
+
+          info.setContent(`
+            <div style="max-width:280px; font-family:Arial, sans-serif;">
+              <strong>Zone ${index + 1}: ${hotspot.location}</strong><br>
+              <span>${dangerInfo(danger).label}</span><br><br>
+              <small>${incidentList}</small><br><br>
+              <strong>Action:</strong><br>
+              <small>${dangerInfo(danger).action}</small>
+            </div>
+          `);
+
+          info.open(map, marker);
+        });
+      });
+
+      if (google.maps.visualization && incidents.length) {
+        const heatmapData = incidents.map(item => ({
+          location: new google.maps.LatLng(item.lat, item.lng),
+          weight: Number(item.danger) * 2
+        }));
+
+        new google.maps.visualization.HeatmapLayer({
+          data: heatmapData,
+          radius: 42,
+          opacity: 0.58,
+          gradient: [
+            "rgba(22, 163, 74, 0)",
+            "rgba(22, 163, 74, 0.45)",
+            "rgba(234, 179, 8, 0.62)",
+            "rgba(220, 38, 38, 0.86)"
+          ],
+          map
+        });
+      }
+
+      if (fallbackEl) {
+        fallbackEl.style.display = "none";
+      }
+    }
+
+    function createTransparentMarkerIcon() {
+      if (!window.google || !window.google.maps) return null;
+
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="2" height="2"><circle cx="1" cy="1" r="1" fill="transparent"/></svg>`;
+
+      return {
+        url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg),
+        scaledSize: new google.maps.Size(2, 2),
+        anchor: new google.maps.Point(1, 1)
+      };
+    }
+
+    function createRiskZoneOverlay(map, position, level = 3) {
+      if (!window.google || !window.google.maps || !google.maps.OverlayView) return null;
+
+      class RiskZoneOverlay extends google.maps.OverlayView {
+        constructor(map, position, level) {
+          super();
+          this.position = position;
+          this.level = level;
+          this.div = null;
+          this.setMap(map);
+        }
+
+        onAdd() {
+          this.div = document.createElement("div");
+          this.div.className = `gm-risk-zone level${this.level}`;
+          this.getPanes().overlayLayer.appendChild(this.div);
+        }
+
+        draw() {
+          const point = this.getProjection().fromLatLngToDivPixel(this.position);
+          if (!point || !this.div) return;
+          this.div.style.left = `${point.x}px`;
+          this.div.style.top = `${point.y}px`;
+        }
+
+        onRemove() {
+          if (this.div) this.div.remove();
+          this.div = null;
+        }
+      }
+
+      return new RiskZoneOverlay(map, position, level);
+    }
+
+    function createAlertMarkerOverlay(map, position, level = 3, number = 1) {
+      if (!window.google || !window.google.maps || !google.maps.OverlayView) return null;
+
+      class AlertMarkerOverlay extends google.maps.OverlayView {
+        constructor(map, position, level, number) {
+          super();
+          this.position = position;
+          this.level = level;
+          this.number = number;
+          this.div = null;
+          this.numberDiv = null;
+          this.setMap(map);
+        }
+
+        onAdd() {
+          this.div = document.createElement("div");
+          this.div.className = `gm-alert-marker level${this.level}`;
+          this.div.innerHTML = `<div class="alert-head"></div><div class="alert-stem"></div>`;
+
+          this.numberDiv = document.createElement("div");
+          this.numberDiv.className = "gm-zone-number";
+          this.numberDiv.textContent = this.number;
+
+          const panes = this.getPanes();
+          panes.overlayMouseTarget.appendChild(this.div);
+          panes.overlayMouseTarget.appendChild(this.numberDiv);
+        }
+
+        draw() {
+          const point = this.getProjection().fromLatLngToDivPixel(this.position);
+          if (!point || !this.div || !this.numberDiv) return;
+
+          this.div.style.left = `${point.x}px`;
+          this.div.style.top = `${point.y}px`;
+          this.numberDiv.style.left = `${point.x}px`;
+          this.numberDiv.style.top = `${point.y}px`;
+        }
+
+        onRemove() {
+          if (this.div) this.div.remove();
+          if (this.numberDiv) this.numberDiv.remove();
+          this.div = null;
+          this.numberDiv = null;
+        }
+      }
+
+      return new AlertMarkerOverlay(map, position, level, number);
+    }
+
+    function createBoundaryLabelOverlay(map, position, label = "Barangay Amparo Boundary") {
+      if (!window.google || !window.google.maps || !google.maps.OverlayView) return null;
+
+      class BoundaryLabelOverlay extends google.maps.OverlayView {
+        constructor(map, position, label) {
+          super();
+          this.position = position;
+          this.label = label;
+          this.div = null;
+          this.setMap(map);
+        }
+
+        onAdd() {
+          this.div = document.createElement("div");
+          this.div.className = "gm-boundary-label";
+          this.div.textContent = this.label;
+          this.getPanes().overlayMouseTarget.appendChild(this.div);
+        }
+
+        draw() {
+          const point = this.getProjection().fromLatLngToDivPixel(this.position);
+          if (!point || !this.div) return;
+          this.div.style.left = `${point.x}px`;
+          this.div.style.top = `${point.y}px`;
+        }
+
+        onRemove() {
+          if (this.div) this.div.remove();
+          this.div = null;
+        }
+      }
+
+      return new BoundaryLabelOverlay(map, position, label);
+    }
+
+    function createWarningSignOverlay(map, position) {
+      if (!window.google || !window.google.maps || !google.maps.OverlayView) return null;
+
+      class WarningSignOverlay extends google.maps.OverlayView {
+        constructor(map, position) {
+          super();
+          this.position = position;
+          this.div = null;
+          this.setMap(map);
+        }
+
+        onAdd() {
+          this.div = document.createElement("div");
+          this.div.className = "gm-warning-sign";
+          this.getPanes().overlayMouseTarget.appendChild(this.div);
+        }
+
+        draw() {
+          const point = this.getProjection().fromLatLngToDivPixel(this.position);
+          if (!point || !this.div) return;
+          this.div.style.left = `${point.x}px`;
+          this.div.style.top = `${point.y - 18}px`;
+        }
+
+        onRemove() {
+          if (this.div) this.div.remove();
+          this.div = null;
+        }
+      }
+
+      return new WarningSignOverlay(map, position);
+    }
+
+    function createRiskPulseOverlay(map, position, size = 120) {
+      if (!window.google || !window.google.maps || !google.maps.OverlayView) return null;
+
+      class RiskPulseOverlay extends google.maps.OverlayView {
+        constructor(map, position, size) {
+          super();
+          this.position = position;
+          this.size = size;
+          this.div = null;
+          this.setMap(map);
+        }
+
+        onAdd() {
+          this.div = document.createElement("div");
+          this.div.className = "gm-risk-pulse";
+          this.div.style.width = `${this.size}px`;
+          this.div.style.height = `${this.size}px`;
+          this.getPanes().overlayLayer.appendChild(this.div);
+        }
+
+        draw() {
+          const point = this.getProjection().fromLatLngToDivPixel(this.position);
+          if (!point || !this.div) return;
+          this.div.style.left = `${point.x}px`;
+          this.div.style.top = `${point.y}px`;
+        }
+
+        onRemove() {
+          if (this.div) this.div.remove();
+          this.div = null;
+        }
+      }
+
+      return new RiskPulseOverlay(map, position, size);
+    }
+
+    window.initMap = function () {
+      if (currentPage === "map") {
+        tryDrawGoogleMap();
+      }
+    };
+
+    function cartPredict(input) {
+      let score = 0;
+
+      const highRiskTypes = [
+        "Theft",
+        "Physical Injury",
+        "Suspicious Activity",
+        "Domestic Disturbance"
+      ];
+
+      const hour = Number(input.time.split(":")[0]);
+
+      if (highRiskTypes.includes(input.type)) score += 2;
+      if (input.repeats >= 3) score += 2;
+      if (hour >= 19 || hour <= 4) score += 1;
+      if (["Friday", "Saturday", "Sunday"].includes(input.day)) score += 1;
+      if (input.previousRisk === "High") score += 2;
+      if (input.frequency === "High") score += 2;
+      if (
+        input.location.toLowerCase().includes("purok 3") ||
+        input.location.toLowerCase().includes("market")
+      ) {
+        score += 1;
+      }
+
+      let level = 1;
+
+      if (score >= 6) level = 3;
+      else if (score >= 3) level = 2;
+
+      const confidence = Math.min(96, 58 + score * 6 + input.repeats * 2);
+
+      let explanation = "The area has low or manageable risk indicators based on the given inputs.";
+      let action = "Normal monitoring.";
+
+      if (level === 2) {
+        explanation = "The system detected moderate risk due to repeated incidents, timing, or prior risk history.";
+        action = "Increase awareness and schedule patrol visibility.";
+      }
+
+      if (level === 3) {
+        explanation = "The system detected repeated high-risk patterns based on incident type, recurrence, location history, and evening or late-night timing.";
+        action = "Priority patrol, close monitoring, and additional tanod visibility.";
+      }
+
+      return {
+        level,
+        confidence,
+        explanation,
+        action,
+        path: [
+          `Incident type checked: ${input.type}`,
+          `Repeated incidents checked: ${input.repeats}`,
+          `Time checked: ${input.time}`,
+          `Day checked: ${input.day}`,
+          `Previous risk history checked: ${input.previousRisk}`,
+          `Frequency checked: ${input.frequency}`,
+          `Final classification: ${dangerInfo(level).label}`
+        ]
+      };
+    }
+
+    function renderCartPage() {
+      const sample = cartPredict({
+        type: "Theft",
+        repeats: 4,
+        time: "21:30",
+        day: "Saturday",
+        location: "Purok 3 - Amparo Main Road",
+        previousRisk: "High",
+        frequency: "High"
+      });
+
+      $("#content").innerHTML = `
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="section-title">
+              <h3>Simulated CART Risk Classifier</h3>
+              <span>Prototype Model</span>
+            </div>
+
+            <form id="cartForm" onsubmit="runCartAnalysis(event)">
+              <div class="form-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr));">
+                <div class="field">
+                  <label>Incident Type</label>
+                  <select id="cartType">
+                    <option>Theft</option>
+                    <option>Physical Injury</option>
+                    <option>Noise Complaint</option>
+                    <option>Vandalism</option>
+                    <option>Suspicious Activity</option>
+                    <option>Traffic Obstruction</option>
+                    <option>Curfew Violation</option>
+                    <option>Domestic Disturbance</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label>Repeated Incidents</label>
+                  <input id="cartRepeats" type="number" min="0" value="4" />
+                </div>
+
+                <div class="field">
+                  <label>Time of Occurrence</label>
+                  <input id="cartTime" type="time" value="21:30" />
+                </div>
+
+                <div class="field">
+                  <label>Day of Week</label>
+                  <select id="cartDay">
+                    <option>Monday</option>
+                    <option>Tuesday</option>
+                    <option>Wednesday</option>
+                    <option>Thursday</option>
+                    <option>Friday</option>
+                    <option selected>Saturday</option>
+                    <option>Sunday</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label>Location / Purok / Street</label>
+                  <input id="cartLocation" type="text" value="Purok 3 - Amparo Main Road" />
+                </div>
+
+                <div class="field">
+                  <label>Previous Risk History</label>
+                  <select id="cartHistory">
+                    <option>Low</option>
+                    <option>Moderate</option>
+                    <option selected>High</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label>Incident Frequency</label>
+                  <select id="cartFrequency">
+                    <option>Low</option>
+                    <option>Moderate</option>
+                    <option selected>High</option>
+                  </select>
+                </div>
+              </div>
+
+              <br>
+
+              <button class="btn btn-primary" type="submit">Run CART Analysis</button>
+            </form>
+          </div>
+
+          <div id="cartResult" class="card recommendation">
+            ${renderCartResult(sample)}
+          </div>
+        </div>
+
+        <br>
+
+        <div class="card">
+          <div class="section-title">
+            <h3>Decision Tree Rule Explanation</h3>
+            <span>Simulated CART Path</span>
+          </div>
+
+          <div class="tree">
+            <div class="tree-node">
+              <strong>Root Node: Incident Pattern</strong>
+              The system evaluates incident type, repeated incidents, time, day, location, history, and frequency.
+            </div>
+
+            <div class="tree-children">
+              <div class="tree-node">
+                <strong>Low Pattern Branch</strong>
+                Low frequency, daytime occurrence, and no repeated hotspot history usually produce Level 1.
+              </div>
+
+              <div class="tree-node">
+                <strong>Risk Pattern Branch</strong>
+                Repeated incidents, night timing, risky incident types, and prior hotspot history increase classification.
+              </div>
+            </div>
+
+            <div class="tree-node" style="border-left-color: var(--red);">
+              <strong>Example Rule</strong>
+              If theft incidents repeatedly occur at night in the same area, the system classifies the location as
+              Level 3 — High Crime / Considerable Danger and recommends increased patrol visibility.
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCartResult(result) {
+      return `
+        <div class="section-title">
+          <h3>Prediction Result</h3>
+          <span>${result.confidence}% Confidence</span>
+        </div>
+
+        <p>
+          <span class="pill ${dangerInfo(result.level).className}">
+            ${dangerInfo(result.level).label}
+          </span>
+        </p>
+
+        <br>
+
+        <p class="stat-note"><strong>Risk Explanation:</strong> ${result.explanation}</p>
+        <br>
+        <p class="stat-note"><strong>Suggested Patrol Action:</strong> ${result.action}</p>
+
+        <br>
+
+        <div class="section-title">
+          <h3>Decision Path</h3>
+          <span>Rule Trace</span>
+        </div>
+
+        <ul style="padding-left: 20px; color: #475569; line-height: 1.8;">
+          ${result.path.map(step => `<li>${step}</li>`).join("")}
+        </ul>
+      `;
+    }
+
+    function runCartAnalysis(event) {
+      event.preventDefault();
+
+      const input = {
+        type: $("#cartType").value,
+        repeats: Number($("#cartRepeats").value),
+        time: $("#cartTime").value,
+        day: $("#cartDay").value,
+        location: $("#cartLocation").value,
+        previousRisk: $("#cartHistory").value,
+        frequency: $("#cartFrequency").value
+      };
+
+      const result = cartPredict(input);
+
+      $("#cartResult").innerHTML = renderCartResult(result);
+
+      toast("CART analysis generated.");
+    }
+
+    function generatePatrolRecommendations() {
+      const incidents = getMonthlyIncidents(selectedAnalyticsMonth);
+      const grouped = {};
+
+      incidents.forEach(item => {
+        if (!grouped[item.location]) {
+          grouped[item.location] = {
+            location: item.location,
+            incidents: [],
+            maxDanger: 1,
+            score: 0
+          };
+        }
+
+        grouped[item.location].incidents.push(item);
+        grouped[item.location].maxDanger = Math.max(grouped[item.location].maxDanger, item.danger);
+
+        const hour = Number(item.time.split(":")[0]);
+        const nightScore = hour >= 19 || hour <= 4 ? 2 : 0;
+
+        grouped[item.location].score += item.danger * 3 + nightScore;
+      });
+
+      return Object.values(grouped)
+        .map(group => {
+          const topType = mostCommon(group.incidents, item => item.type)[0];
+          const topHour = mostCommon(group.incidents, item => item.time.split(":")[0] + ":00")[0];
+
+          const tanods = group.maxDanger === 3 ? 4 : group.maxDanger === 2 ? 3 : 2;
+
+          return {
+            location: group.location,
+            riskLevel: group.maxDanger,
+            incidentPattern: `${topType} incidents, commonly around ${topHour}`,
+            recommendedTime:
+              group.maxDanger === 3
+                ? "7:00 PM – 11:00 PM"
+                : group.maxDanger === 2
+                  ? "4:00 PM – 8:00 PM"
+                  : "Routine schedule",
+            reason: `Detected ${group.incidents.length} record/s with ${dangerInfo(group.maxDanger).label}.`,
+            tanods,
+            priority:
+              group.maxDanger === 3
+                ? "High Priority"
+                : group.maxDanger === 2
+                  ? "Medium Priority"
+                  : "Normal Priority",
+            score: group.score
+          };
+        })
+        .sort((a, b) => b.score - a.score);
+    }
+
+    function renderRecommendationCard(rec, wrapped = true) {
+      return `
+        <div
+          class="${wrapped ? "card" : ""} recommendation"
+          style="${wrapped ? "" : "padding:16px; border-radius:16px; margin-bottom:14px;"}"
+        >
+          <div class="section-title">
+            <h3>${rec.location}</h3>
+            <span class="priority-badge">${rec.priority}</span>
+          </div>
+
+          <p>
+            <span class="pill ${dangerInfo(rec.riskLevel).className}">
+              ${dangerInfo(rec.riskLevel).label}
+            </span>
+          </p>
+
+          <br>
+
+          <p class="stat-note"><strong>Recommended Patrol Time:</strong> ${rec.recommendedTime}</p>
+          <p class="stat-note"><strong>Reason:</strong> ${rec.reason}</p>
+          <p class="stat-note"><strong>Incident Pattern:</strong> ${rec.incidentPattern}</p>
+          <p class="stat-note"><strong>Suggested Number of Tanods:</strong> ${rec.tanods}</p>
+          <p class="stat-note"><strong>Suggested Action:</strong> ${dangerInfo(rec.riskLevel).action}</p>
+        </div>
+      `;
+    }
+
+    function renderPatrolPage() {
+      const recommendations = generatePatrolRecommendations();
+
+      $("#content").innerHTML = `
+        <div class="card no-print" style="margin-bottom:18px;">
+          <div class="section-title">
+            <div>
+              <h3>Monthly Patrol Decision Filter</h3>
+              <p class="stat-note">
+                Patrol recommendations use the same selected month as the dashboard and map.
+              </p>
+            </div>
+            <div style="min-width:190px;">
+              ${monthSelectHTML("patrol")}
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-3">
+          ${statCard("First Patrol Area", recommendations[0]?.location || "None", "Highest ranked patrol priority zone.")}
+          ${statCard("Recommended Time", recommendations[0]?.recommendedTime || "Routine", "Suggested patrol window based on incident timing.")}
+          ${statCard("Tanods Needed", recommendations[0]?.tanods || 2, "Suggested manpower for top priority zone.")}
+        </div>
+
+        <br>
+
+        <div class="grid grid-2">
+          ${recommendations.length ? recommendations.map(item => renderRecommendationCard(item, true)).join("") : renderEmptyState("No patrol recommendation for the selected month.")}
+        </div>
+      `;
+    }
+
+    function renderReportsPage() {
+      const incidents = getMonthlyIncidents(selectedAnalyticsMonth);
+
+      $("#content").innerHTML = `
+        <div class="card no-print" style="margin-bottom:18px;">
+          <div class="section-title">
+            <div>
+              <h3>Report Month Filter</h3>
+              <p class="stat-note">
+                Reports follow the same shared monthly filter.
+              </p>
+            </div>
+            <div style="min-width:190px;">
+              ${monthSelectHTML("reports")}
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-3 no-print">
+          <div class="card report-card">
+            <div>
+              <h3>Printable Incident Summary</h3>
+              <p>Formal report containing incident totals, hotspot summaries, risk classifications, and recommended patrol actions.</p>
+            </div>
+
+            <button class="btn btn-primary" onclick="window.print()">Print / Export PDF</button>
+          </div>
+
+          <div class="card report-card">
+            <div>
+              <h3>Export CSV</h3>
+              <p>Download selected-month incident records in spreadsheet-ready CSV format for documentation and testing.</p>
+            </div>
+
+            <button class="btn btn-success" onclick="exportCSV()">Export CSV</button>
+          </div>
+
+          <div class="card report-card">
+            <div>
+              <h3>Patrol Recommendation Report</h3>
+              <p>Generate priority patrol guidance based on simulated CART and BI risk indicators.</p>
+            </div>
+
+            <button class="btn btn-warning" onclick="showPage('patrol')">View Patrol Report</button>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="card clean-card">
+          <div class="section-title">
+            <h3>Barangay 179 Monthly Crime Trend Report</h3>
+            <span>${formatMonthLabel(selectedAnalyticsMonth)}</span>
+          </div>
+
+          <p class="stat-note">
+            System Name: Barangay 179 Crime Intelligence and Patrol Decision Support System<br>
+            Coverage Area: Barangay 179, Amparo, Caloocan City<br>
+            Report Type: Incident Summary, Hotspot Summary, Patrol Recommendation, and Risk Classification Report
+          </p>
+
+          <br>
+
+          <div class="grid grid-4">
+            ${statCard("Total Incidents", incidents.length, "Recorded in selected month.")}
+            ${statCard("Level 3 Records", incidents.filter(item => item.danger === 3).length, "High-risk danger indicators.")}
+            ${statCard("Level 2 Records", incidents.filter(item => item.danger === 2).length, "Moderate danger indicators.")}
+            ${statCard("Level 1 Records", incidents.filter(item => item.danger === 1).length, "Low danger indicators.")}
+          </div>
+
+          <br>
+
+          <div class="section-title">
+            <h3>Risk Classification Report</h3>
+            <span>CART Simulation Output</span>
+          </div>
+
+          <div class="table-wrap">
+            ${incidents.length ? renderIncidentTable(incidents, false) : renderEmptyState("No records for selected month.")}
+          </div>
+        </div>
+
+        <br>
+
+        <div class="card clean-card">
+          <div class="section-title">
+            <h3>Hotspot Summary</h3>
+            <span>Barangay-Level Pattern Analysis</span>
+          </div>
+
+          ${incidents.length ? renderHotspotRanking(incidents) : renderEmptyState("No hotspot records for selected month.")}
+        </div>
+      `;
+    }
+
+    function exportCSV() {
+      const incidents = getMonthlyIncidents(selectedAnalyticsMonth);
+
+      const headers = [
+        "Incident ID",
+        "Type",
+        "Date",
+        "Time",
+        "Location",
+        "Description",
+        "Reported By",
+        "Status",
+        "Danger Level",
+        "Latitude",
+        "Longitude",
+        "Recommended Action"
+      ];
+
+      const rows = incidents.map(item => [
+        item.id,
+        item.type,
+        item.date,
+        item.time,
+        item.location,
+        item.description,
+        item.reportedBy,
+        item.status,
+        dangerInfo(item.danger).label,
+        item.lat,
+        item.lng,
+        item.action
+      ]);
+
+      const csv = [headers, ...rows]
+        .map(row => row.map(value => `"${String(value).replaceAll('"', '""')}"`).join(","))
+        .join("\n");
+
+      const blob = new Blob([csv], {
+        type: "text/csv;charset=utf-8;"
+      });
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = `barangay-179-incident-report-${selectedAnalyticsMonth}.csv`;
+      link.click();
+
+      URL.revokeObjectURL(url);
+
+      toast("CSV report exported.");
+    }
+
+    function renderUsersPage() {
+      const users = getUsers();
+
+      $("#content").innerHTML = `
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="section-title">
+              <h3>Add System User</h3>
+              <span>Administrator Only</span>
+            </div>
+
+            <form onsubmit="addUser(event)">
+              <div class="field">
+                <label>Name</label>
+                <input id="newName" required placeholder="Full name or position" />
+              </div>
+
+              <div class="field">
+                <label>Username</label>
+                <input id="newUsername" required placeholder="username" />
+              </div>
+
+              <div class="field">
+                <label>Password</label>
+                <input id="newPassword" required placeholder="password" />
+              </div>
+
+              <div class="field">
+                <label>Role</label>
+                <select id="newRole">
+                  <option value="admin">Administrator</option>
+                  <option value="captain">Decision-Maker</option>
+                  <option value="tanod">Field User</option>
+                </select>
+              </div>
+
+              <button class="btn btn-primary" type="submit">Add User</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <div class="section-title">
+              <h3>Role Access Rules</h3>
+              <span>System Security</span>
+            </div>
+
+            <p class="stat-note">
+              <strong>Administrator:</strong> Full access to records, users, reports, maps, analytics, and settings.<br><br>
+              <strong>Decision-Maker:</strong> View-only access to reports, heatmaps, CART analytics, and patrol recommendations.<br><br>
+              <strong>Field User:</strong> Limited view access to patrol recommendations, hotspot maps, assigned areas, and warning zones.
+            </p>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="card clean-card">
+          <div class="section-title">
+            <h3>System Users</h3>
+            <span>${users.length} account/s</span>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Username</th>
+                  <th>Role</th>
+                  <th>Password</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                ${users.map(user => `
+                  <tr>
+                    <td><strong>${user.name}</strong></td>
+                    <td>${user.username}</td>
+                    <td>${ROLE_LABELS[user.role]}</td>
+                    <td>${user.password}</td>
+                    <td>
+                      <button class="btn btn-danger" onclick="deleteUser('${user.username}')">Delete</button>
+                    </td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function addUser(event) {
+      event.preventDefault();
+
+      const users = getUsers();
+      const username = $("#newUsername").value.trim();
+
+      if (users.some(item => item.username === username)) {
+        toast("Username already exists.");
+        return;
+      }
+
+      users.push({
+        name: $("#newName").value.trim(),
+        username,
+        password: $("#newPassword").value.trim(),
+        role: $("#newRole").value
+      });
+
+      saveUsers(users);
+      toast("User added.");
+      renderUsersPage();
+    }
+
+    function deleteUser(username) {
+      if (username === currentUser.username) {
+        toast("You cannot delete the currently logged-in user.");
+        return;
+      }
+
+      const users = getUsers().filter(item => item.username !== username);
+
+      saveUsers(users);
+      toast("User deleted.");
+      renderUsersPage();
+    }
+
+    function renderSettingsPage() {
+      $("#content").innerHTML = `
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="section-title">
+              <h3>Barangay Map Settings</h3>
+              <span>Prototype Configuration</span>
+            </div>
+
+            <div class="field">
+              <label>Default Map Center Latitude</label>
+              <input value="${BRGY_CENTER.lat}" readonly />
+            </div>
+
+            <div class="field">
+              <label>Default Map Center Longitude</label>
+              <input value="${BRGY_CENTER.lng}" readonly />
+            </div>
+
+            <div class="field">
+              <label>Google Maps API Key Placeholder</label>
+              <input value="${GOOGLE_MAPS_API_KEY_PLACEHOLDER}" readonly />
+            </div>
+
+            <p class="stat-note">
+              Replace the placeholder API key inside the Google Maps script tag at the bottom of this file.
+              Replace the barangay boundary coordinates inside the JavaScript variable named BRGY_BOUNDARY.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="section-title">
+              <h3>Risk Classification Settings</h3>
+              <span>CART Simulation</span>
+            </div>
+
+            <div class="field">
+              <label>Level 1 Rule</label>
+              <input value="Low frequency, daytime, no repeated hotspot history" readonly />
+            </div>
+
+            <div class="field">
+              <label>Level 2 Rule</label>
+              <input value="Moderate recurrence, scheduled patrol recommended" readonly />
+            </div>
+
+            <div class="field">
+              <label>Level 3 Rule</label>
+              <input value="Repeated incidents, high-risk type, night time, prior hotspot history" readonly />
+            </div>
+
+            <p class="stat-note">
+              This prototype uses simulated rule-based CART logic.
+              For actual deployment, replace this with a trained CART model using validated barangay incident data.
+            </p>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="card">
+          <div class="section-title">
+            <h3>System Reset</h3>
+            <span>Prototype Testing</span>
+          </div>
+
+          <p class="stat-note">
+            Resetting will restore the original sample users and dummy incident records.
+          </p>
+
+          <br>
+
+          <button class="btn btn-danger" onclick="resetPrototype()">Reset Prototype Data</button>
+        </div>
+      `;
+    }
+
+    function resetPrototype() {
+      const confirmed = confirm("Reset all prototype data to default sample records?");
+
+      if (!confirmed) return;
+
+      localStorage.removeItem("b179_users");
+      localStorage.removeItem("b179_incidents");
+
+      toast("Prototype data reset.");
+      renderSettingsPage();
+    }
+
+    $("#loginForm").addEventListener("submit", login);
+  </script>
+
+  <script
+    async
+    defer
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY_HERE&libraries=visualization&callback=initMap">
+  </script>
+</body>
+</html>  
