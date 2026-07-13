@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="BARANGAY-CRIME-PROJECT/style.css">
+  <link rel="stylesheet" href="style.css">
 
   <style>
     :root {
@@ -1439,7 +1439,7 @@
     <div class="main-wrapper d-flex align-items-center justify-content-center min-vh-100">
     <div class="login-card glassmorphism float-animation">
       <div class="text-center mb-4">
-        <img src="BARANGAY-CRIME-PROJECT/assets/logo.jpg" alt="Barangay 179 Amparo Seal" class="brand-logo mb-3">
+        <img src="assets/logo.jpg" alt="Barangay 179 Amparo Seal" class="brand-logo mb-3">
 
         <div class="stars mb-2">
           <i class="bi bi-star-fill"></i>
@@ -1910,6 +1910,28 @@
 
     const $ = selector => document.querySelector(selector);
 
+    function tryAutoLoginFromPending() {
+      const pendingLogin = localStorage.getItem("b179_pending_login");
+
+      if (!pendingLogin) return;
+
+      localStorage.removeItem("b179_pending_login");
+
+      try {
+        const credentials = JSON.parse(pendingLogin);
+        const usernameField = $("#username");
+        const passwordField = $("#password");
+
+        if (usernameField && passwordField) {
+          usernameField.value = credentials.username || "";
+          passwordField.value = credentials.password || "";
+          login({ preventDefault() {} });
+        }
+      } catch (error) {
+        console.warn("Pending login could not be restored.", error);
+      }
+    }
+
     function getUsers() {
       return JSON.parse(localStorage.getItem("b179_users")) || DEFAULT_USERS;
     }
@@ -1991,15 +2013,15 @@
 
       currentUser = user;
 
-      $("#loginPage").classList.add("hidden");
-      $("#appPage").classList.remove("hidden");
-      $("#userDisplay").textContent = user.name || user.username;
-      $("#roleDisplay").textContent = ROLE_LABELS[user.role] || user.role;
+      localStorage.setItem("b179_active_user", JSON.stringify(user));
 
-      renderNav();
-      showPage(defaultPageForRole());
+      const landingPage = landingPageForRole(user.role);
 
       toast("Login successful.");
+
+      setTimeout(() => {
+        window.location.href = `./menu-pages/${landingPage}.html`;
+      }, 400);
     }
 
     function logout() {
@@ -2016,6 +2038,10 @@
     function defaultPageForRole() {
       if (!currentUser) return "dashboard";
       return currentUser.role === "tanod" ? "fieldDashboard" : "dashboard";
+    }
+
+    function landingPageForRole(role) {
+      return role === "tanod" ? "fieldDashboard" : "dashboard";
     }
 
     function allowedPage(pageId) {
@@ -4236,6 +4262,7 @@
     }
 
     $("#loginForm").addEventListener("submit", login);
+    tryAutoLoginFromPending();
   </script>
 
   <script
