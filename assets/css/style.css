@@ -1,0 +1,380 @@
+/* --- Base Styles --- */
+:root {
+    --primary-blue: #2563EB;
+    --dark-blue: #0B2C6B;
+    --accent-gold: #F4B400;
+    --bg-cream: #f4f7fb;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.95), rgba(255,255,255,0.72) 24%, rgba(255,255,255,0.25) 52%, rgba(240,246,255,0.92) 100%),
+        linear-gradient(135deg, #f7fbff 0%, #e8f1ff 45%, #f7f9fc 100%);
+}
+
+/* --- Background Section --- */
+.background-container {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    z-index: -1;
+    overflow: hidden;
+}
+
+.bg-panel {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    filter: saturate(1.04) contrast(1.02);
+}
+
+.bg-panel::before,
+.bg-panel::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+
+.bg-panel-1 {
+    background:
+        radial-gradient(circle at 38% 34%, rgba(255, 232, 153, 0.92) 0 9%, rgba(255, 232, 153, 0.28) 10%, transparent 11%),
+        radial-gradient(circle at 42% 36%, rgba(255, 255, 255, 0.8) 0 16%, transparent 17%),
+        linear-gradient(180deg, rgba(168, 220, 255, 0.92) 0%, rgba(238, 248, 255, 0.96) 58%, rgba(245, 249, 255, 0.98) 100%);
+}
+
+.bg-panel-1::before {
+    background:
+        linear-gradient(160deg, transparent 0 42%, rgba(255,255,255,0.72) 42% 43%, transparent 43% 100%),
+        linear-gradient(180deg, transparent 0 54%, rgba(255,255,255,0.7) 54% 56%, transparent 56% 100%),
+        linear-gradient(90deg, transparent 0 56%, rgba(255,255,255,0.72) 56% 57%, transparent 57% 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 92%);
+    opacity: 0.9;
+}
+
+.bg-panel-1::after {
+    background:
+        radial-gradient(circle at 23% 22%, rgba(255, 227, 132, 0.95) 0 1.2%, transparent 1.3%),
+        radial-gradient(circle at 19% 28%, rgba(255, 227, 132, 0.95) 0 1.2%, transparent 1.3%),
+        radial-gradient(circle at 27% 18%, rgba(255, 227, 132, 0.95) 0 1.2%, transparent 1.3%),
+        radial-gradient(circle at 64% 60%, rgba(255,255,255,0.9) 0 12%, transparent 13%),
+        radial-gradient(circle at 71% 62%, rgba(173, 220, 179, 0.94) 0 9%, transparent 10%),
+        linear-gradient(180deg, transparent 0 71%, rgba(255, 255, 255, 0.82) 71% 100%);
+    opacity: 0.85;
+}
+
+.bg-panel-2 {
+    background:
+        linear-gradient(180deg, rgba(197, 231, 255, 0.94) 0%, rgba(239, 247, 255, 0.95) 45%, rgba(193, 206, 222, 0.9) 46%, rgba(211, 216, 228, 0.98) 100%);
+}
+
+.bg-panel-2::before {
+    background:
+        linear-gradient(180deg, transparent 0 56%, rgba(141, 162, 184, 0.95) 56% 100%),
+        linear-gradient(90deg, transparent 0 11%, rgba(29, 64, 133, 0.85) 11% 16%, transparent 16% 21%, rgba(43, 90, 168, 0.88) 21% 27%, transparent 27% 33%, rgba(18, 58, 122, 0.82) 33% 38%, transparent 38% 46%, rgba(31, 72, 145, 0.9) 46% 54%, transparent 54% 60%, rgba(53, 106, 183, 0.86) 60% 67%, transparent 67% 100%),
+        linear-gradient(180deg, transparent 0 34%, rgba(255,255,255,0.55) 34% 36%, transparent 36% 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 86%);
+    opacity: 0.95;
+}
+
+.bg-panel-2::after {
+    background:
+        linear-gradient(180deg, transparent 0 61%, rgba(243, 185, 72, 0.88) 61% 66%, transparent 66% 100%),
+        linear-gradient(135deg, transparent 0 62%, rgba(255, 255, 255, 0.85) 62% 64%, transparent 64% 100%),
+        radial-gradient(circle at 82% 30%, rgba(255,255,255,0.75) 0 8%, transparent 9%);
+    opacity: 0.8;
+}
+
+.bg-panel-3 {
+    background:
+        linear-gradient(180deg, rgba(255, 245, 235, 0.95) 0%, rgba(255, 233, 220, 0.85) 37%, rgba(214, 224, 235, 0.88) 38%, rgba(168, 180, 192, 0.94) 100%);
+}
+
+.bg-panel-3::before {
+    background:
+        linear-gradient(180deg, transparent 0 47%, rgba(117, 79, 52, 0.9) 47% 100%),
+        linear-gradient(90deg, transparent 0 12%, rgba(247, 149, 89, 0.96) 12% 22%, transparent 22% 28%, rgba(90, 188, 209, 0.9) 28% 38%, transparent 38% 44%, rgba(233, 115, 92, 0.92) 44% 52%, transparent 52% 60%, rgba(94, 162, 97, 0.9) 60% 68%, transparent 68% 100%),
+        linear-gradient(160deg, transparent 0 60%, rgba(255,255,255,0.88) 60% 61%, transparent 61% 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 82%);
+}
+
+.bg-panel-3::after {
+    background:
+        linear-gradient(180deg, transparent 0 70%, rgba(60, 72, 89, 0.85) 70% 100%),
+        radial-gradient(circle at 79% 22%, rgba(255,255,255,0.82) 0 5%, transparent 6%);
+    opacity: 0.75;
+}
+
+.bg-panel-4 {
+    background:
+        linear-gradient(180deg, rgba(245, 251, 255, 0.92) 0%, rgba(222, 243, 228, 0.88) 45%, rgba(201, 231, 210, 0.96) 100%);
+}
+
+.bg-panel-4::before {
+    background:
+        linear-gradient(180deg, transparent 0 34%, rgba(232, 207, 156, 0.95) 34% 38%, transparent 38% 100%),
+        linear-gradient(180deg, transparent 0 44%, rgba(249, 248, 240, 0.98) 44% 64%, transparent 64% 100%),
+        linear-gradient(90deg, transparent 0 18%, rgba(60, 95, 171, 0.86) 18% 24%, transparent 24% 30%, rgba(45, 77, 148, 0.9) 30% 36%, transparent 36% 42%, rgba(71, 119, 195, 0.85) 42% 48%, transparent 48% 100%),
+        linear-gradient(180deg, transparent 0 79%, rgba(39, 120, 62, 0.8) 79% 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 90%);
+}
+
+.bg-panel-4::after {
+    background:
+        radial-gradient(circle at 64% 31%, rgba(255, 233, 182, 0.92) 0 1.4%, transparent 1.5%),
+        radial-gradient(circle at 70% 30%, rgba(255, 233, 182, 0.92) 0 1.4%, transparent 1.5%),
+        radial-gradient(circle at 76% 33%, rgba(255, 233, 182, 0.92) 0 1.4%, transparent 1.5%),
+        radial-gradient(circle at 42% 79%, rgba(103, 177, 114, 0.9) 0 8%, transparent 9%),
+        radial-gradient(circle at 86% 82%, rgba(103, 177, 114, 0.86) 0 7%, transparent 8%);
+    opacity: 0.8;
+}
+
+.bg-wash {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    background:
+        radial-gradient(circle at center, rgba(255,255,255,0.55) 0 12%, rgba(255,255,255,0.76) 28%, rgba(255,255,255,0.38) 50%, rgba(247,250,255,0.72) 100%),
+        linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.3));
+    mix-blend-mode: screen;
+}
+
+.background-container::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.34) 22%, rgba(255,255,255,0.1) 65%, rgba(255,255,255,0.28));
+    pointer-events: none;
+}
+
+/* --- Main Layout & Glassmorphism --- */
+.main-wrapper {
+    position: relative;
+    z-index: 10;
+    padding: 20px;
+}
+
+.glassmorphism {
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.38);
+    box-shadow: 0 20px 45px rgba(11, 44, 107, 0.12);
+}
+
+/* --- Login Card --- */
+.login-card {
+    width: 100%;
+    max-width: 520px;
+    padding: 42px 40px 34px;
+    border-radius: 28px;
+}
+
+.brand-logo {
+    display: block;
+    width: 118px;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 18px rgba(11, 44, 107, 0.16));
+}
+
+.stars {
+    color: var(--accent-gold);
+    font-size: 1.2rem;
+    letter-spacing: 5px;
+}
+
+.system-title {
+    color: var(--dark-blue);
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+/* Separator with shield */
+.separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.separator span {
+    height: 1px;
+    width: 50px;
+    background-color: #dee2e6;
+}
+
+/* Form Inputs */
+.custom-input-group {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(15, 33, 71, 0.12);
+    transition: all 0.3s ease;
+}
+
+.custom-input-group:focus-within {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.18);
+}
+
+.custom-input-group .input-group-text {
+    border: none;
+    background: transparent;
+}
+
+.custom-input-group .form-control {
+    border: none;
+    padding: 12px 15px;
+}
+
+.custom-input-group .form-control:focus {
+    box-shadow: none;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Links & Buttons */
+.forgot-link {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.forgot-link:hover {
+    text-decoration: underline;
+}
+
+.login-btn {
+    background: linear-gradient(to right, #2563EB, #1D4ED8);
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+/* Footer Section */
+.small-text {
+    font-size: 0.85rem;
+}
+
+.copyright-text {
+    font-size: 0.75rem;
+}
+
+/* --- Bottom Right Floating Card --- */
+.role-selector-card {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 280px;
+    padding: 20px;
+    border-radius: 15px;
+    z-index: 20;
+    transition: transform 0.3s ease;
+}
+
+.role-selector-card:hover {
+    transform: translateY(-5px);
+}
+
+.role-item {
+    background: #ffffff;
+    border: 1px solid #eaedf1;
+    border-radius: 12px;
+    padding: 12px 15px;
+    transition: all 0.2s ease;
+}
+
+.role-item:hover {
+    background: #f8f9fa;
+    border-color: #dee2e6;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.role-icon {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 1.2rem;
+}
+
+/* --- Animations --- */
+.fade-in-page {
+    animation: fadeIn 1s ease-in-out;
+}
+
+.float-animation {
+    animation: floatCard 7s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes floatCard {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    .background-container {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+
+    .bg-panel-2,
+    .bg-panel-4 {
+        opacity: 0.92;
+    }
+
+    .login-card {
+        padding: 30px 20px;
+    }
+
+    .role-selector-card {
+        position: relative;
+        bottom: auto;
+        right: auto;
+        margin: 20px auto 30px;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .main-wrapper {
+        flex-direction: column;
+        padding-bottom: 0;
+    }
+}

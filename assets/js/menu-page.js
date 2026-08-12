@@ -378,12 +378,43 @@
     const incidents = analytics.incidents;
 
     return `
-      <div class="card-panel"><div class="section-title"><div><h3>Monthly Analytics Control</h3><p class="stat-note">All dashboard cards, charts, hotspot table, patrol priorities, and map data use the same selected month.</p></div>${renderMonthSelect("dashboardMonth")}</div></div>
-      <div class="grid-4">${statCard("Monthly Incidents", analytics.total, `Total recorded incidents for ${analytics.selectedMonthLabel}.`)}${statCard("Latest Active Day", analytics.latestDay, "Incidents recorded on the latest date available in this month.")}${statCard("Month Change", analytics.monthlyChange, "Comparison against the previous month with records.")}${statCard("Priority Zones", analytics.priorityZones, "High-risk locations that need stronger patrol visibility.")}</div>
-      <div class="grid-4">${statCard("Common Incident", analytics.commonType, "Most frequently reported incident category for this month.")}${statCard("Highest-Risk Area", analytics.highRiskLocation, "Location with repeated moderate or high-risk reports.")}${statCard("Peak Time", analytics.peakTime, "Most common incident hour in this selected month.")}${statCard("Predicted Risk", analytics.predictedSummary, "CART-inspired monthly risk summary.")}</div>
-      <div class="grid-2"><article class="card-panel"><div class="section-title"><h3>Incident Types</h3><span>${analytics.selectedMonthLabel}</span></div>${renderBarChart(incidents, item => item.type)}</article><article class="card-panel"><div class="section-title"><h3>Danger Level Distribution</h3><span>${analytics.selectedMonthLabel}</span></div>${renderDonutChart(incidents, item => dangerInfo(Number(item.danger)).label)}</article><article class="card-panel"><div class="section-title"><h3>Crime Trend Over Time</h3><span>${analytics.selectedMonthLabel}</span></div>${renderLineChart(incidents)}</article><article class="card-panel"><div class="section-title"><h3>Peak Incident Hours</h3><span>${analytics.selectedMonthLabel}</span></div>${renderBarChart(incidents, item => `${item.time.slice(0, 2)}:00`)}</article></div>
-      <div class="grid-2"><article class="card-panel"><div class="section-title"><h3>Recent Incident Table</h3><span>${analytics.selectedMonthLabel}</span></div>${renderIncidentTable(incidents.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6))}</article><article class="card-panel"><div class="section-title"><h3>Top Hotspot Areas</h3><span>${analytics.selectedMonthLabel}</span></div>${renderHotspotRanking(incidents)}</article></div>
-      <article class="card-panel"><div class="section-title"><h3>Risk Trend Summary</h3><span>BI Interpretation</span></div><p class="stat-note">${escapeHtml(analytics.trend)} ${escapeHtml(analytics.predictedSummary)} The module analyzes incident patterns by location, date, time, incident type, recurrence, and risk level only.</p></article>
+      <section class="dashboard-hero-card card-panel">
+        <div class="dashboard-hero-copy">
+          <span class="eyebrow">Executive Intelligence</span>
+          <h3>Barangay 179 BI Dashboard</h3>
+          <p class="hero-copy">Review monthly incident patterns, hotspot risk, and patrol readiness in a premium dashboard designed for barangay decision-makers and field coordination.</p>
+        </div>
+        <div class="dashboard-hero-control">
+          ${renderMonthSelect("dashboardMonth", "Reporting Month")}
+          <div class="hero-stats">
+            <div><strong>${analytics.total}</strong><span>Records</span></div>
+            <div><strong>${analytics.priorityZones}</strong><span>High-Risk Zones</span></div>
+          </div>
+        </div>
+      </section>
+      <div class="grid-4 dashboard-kpi">
+        ${statCard("Monthly Incidents", analytics.total, `Total recorded incidents for ${analytics.selectedMonthLabel}.`)}
+        ${statCard("Latest Active Day", analytics.latestDay, "Incidents recorded on the latest date available in this month.")}
+        ${statCard("Month Change", analytics.monthlyChange, "Comparison versus the previous monthly period.")}
+        ${statCard("Priority Zones", analytics.priorityZones, "High-risk locations needing closer patrol coverage.")}
+      </div>
+      <div class="grid-4 dashboard-kpi">
+        ${statCard("Common Incident", analytics.commonType || "No records", "Most frequent incident type for the selected month.")}
+        ${statCard("Highest-Risk Area", analytics.highRiskLocation || "No records", "Location with the highest repeated danger reports.")}
+        ${statCard("Peak Time", analytics.peakTime || "No records", "Most frequent incident hour in the selected month.")}
+        ${statCard("Risk Outlook", analytics.predictedSummary, "CART-inspired patrol readiness guidance.")}
+      </div>
+      <div class="grid-2 dashboard-charts">
+        <article class="card-panel chart-card"><div class="section-title"><h3>Incident Types</h3><span>${analytics.selectedMonthLabel}</span></div>${renderBarChart(incidents, item => item.type)}</article>
+        <article class="card-panel chart-card"><div class="section-title"><h3>Danger Level Distribution</h3><span>${analytics.selectedMonthLabel}</span></div>${renderDonutChart(incidents, item => dangerInfo(Number(item.danger)).label)}</article>
+        <article class="card-panel chart-card"><div class="section-title"><h3>Crime Trend Over Time</h3><span>${analytics.selectedMonthLabel}</span></div>${renderLineChart(incidents)}</article>
+        <article class="card-panel chart-card"><div class="section-title"><h3>Peak Incident Hours</h3><span>${analytics.selectedMonthLabel}</span></div>${renderBarChart(incidents, item => `${item.time.slice(0, 2)}:00`)}</article>
+      </div>
+      <div class="grid-2 dashboard-tables">
+        <article class="card-panel table-card"><div class="section-title"><h3>Recent Incident Activity</h3><span>${analytics.selectedMonthLabel}</span></div>${renderIncidentTable(incidents.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6))}</article>
+        <article class="card-panel table-card"><div class="section-title"><h3>Top Hotspot Areas</h3><span>${analytics.selectedMonthLabel}</span></div>${renderHotspotRanking(incidents)}</article>
+      </div>
+      <article class="card-panel summary-card"><div class="section-title"><h3>Risk Trend Summary</h3><span>BI Interpretation</span></div><p class="stat-note">${escapeHtml(analytics.trend)} ${escapeHtml(analytics.predictedSummary)} The dashboard analyzes incident patterns by location, date, time, incident type, recurrence, and danger level.</p></article>
     `;
   }
 
@@ -413,13 +444,13 @@
   }
 
   function renderMapPage() {
-    const incidents = getMonthlyIncidents();
-    const bounds = getMapBounds(incidents.length ? incidents : state.incidents);
+    const investigations = getMonthlyIncidents();
+    const bounds = getMapBounds(investigations.length ? investigations : state.incidents);
     return `
       <div class="card-panel"><div class="section-title"><div><h3>Shared Barangay Risk Map Control</h3><p class="stat-note">Admin, Decision-Maker, and Field User all see the same map, same month, same hotspot coordinates, and same barangay boundary.</p></div>${renderMonthSelect("mapMonth")}</div></div>
-      <div class="grid-3">${statCard("Map Focus", "Barangay 179", "Default center is set to Barangay 179, Amparo, Caloocan City.")}${statCard("Barrier Mode", "Active", "Full barangay boundary mask and high-risk hotspot overlays.")}${statCard("Visible Hotspots", incidents.length ? new Set(incidents.map(item => item.location)).size : 0, "Hotspot zones are based on the selected month and exact incident coordinates.")}</div>
-      <article class="card-panel"><div class="section-title"><h3>Barangay Amparo / Barangay 179 Risk Map</h3><span>${formatMonthLabel(state.month)}</span></div><div class="map-board"><div class="map-grid"></div><div class="map-boundary"></div>${incidents.map((incident, index) => { const info = dangerInfo(Number(incident.danger)); const point = projectPoint(Number(incident.lat), Number(incident.lng), bounds); return `<div class="map-pin ${info.className}" style="left:${point.left}%; top:${point.top}%;"><span>${index + 1}</span></div><div class="map-marker-label" style="left:${point.left}%; top:${point.top}%;">${escapeHtml(incident.location)}</div>`; }).join("")}</div><br><div class="legend"><span class="legend-item"><span class="dot green"></span> Level 1 - Low Danger</span><span class="legend-item"><span class="dot yellow"></span> Level 2 - Moderate Danger</span><span class="legend-item"><span class="dot red"></span> Level 3 - High Risk / Considerable Danger</span></div></article>
-      <article class="card-panel"><div class="section-title"><h3>Map Hotspot List</h3><span>${formatMonthLabel(state.month)}</span></div>${renderHotspotRanking(incidents)}</article>
+      <div class="grid-3">${statCard("Map Focus", "Barangay 179", "Default center is set to Barangay 179, Amparo, Caloocan City.")}${statCard("Barrier Mode", "Active", "Full barangay boundary mask and high-risk hotspot overlays.")}${statCard("Visible Hotspots", investigations.length ? new Set(investigations.map(item => item.location)).size : 0, "Hotspot zones are based on the selected month and exact incident coordinates.")}</div>
+      <article class="card-panel"><div class="section-title"><h3>Barangay Amparo / Barangay 179 Risk Map</h3><span>${formatMonthLabel(state.month)}</span></div><div class="map-board"><div class="map-grid"></div><div class="map-boundary"></div>${investigations.map((incident, index) => { const info = dangerInfo(Number(incident.danger)); const point = projectPoint(Number(incident.lat), Number(incident.lng), bounds); return `<div class="map-pin ${info.className}" style="left:${point.left}%; top:${point.top}%;"><span>${index + 1}</span></div><div class="map-marker-label" style="left:${point.left}%; top:${point.top}%">${escapeHtml(incident.location)}</div>`; }).join("")}</div><br><div class="legend"><span class="legend-item"><span class="dot green"></span> Level 1 - Low Danger</span><span class="legend-item"><span class="dot yellow"></span> Level 2 - Moderate Danger</span><span class="legend-item"><span class="dot red"></span> Level 3 - High Risk / Considerable Danger</span></div></article>
+      <article class="card-panel"><div class="section-title"><h3>Map Hotspot List</h3><span>${formatMonthLabel(state.month)}</span></div>${renderHotspotRanking(investigations)}</article>
     `;
   }
 
@@ -460,7 +491,7 @@
 
   function renderCartPage() {
     const sample = cartPredict({ type: "Theft", repeats: 4, time: "21:30", day: "Saturday", location: "Purok 3 - Amparo Main Road", previousRisk: "High", frequency: "High" });
-    return `<div class="grid-2"><article class="card-panel"><div class="section-title"><h3>Simulated CART Risk Classifier</h3><span>Prototype Model</span></div><form id="cartForm"><div class="form-grid"><div class="field"><label>Incident Type</label><select id="cartType"><option>Theft</option><option>Physical Injury</option><option>Noise Complaint</option><option>Vandalism</option><option>Suspicious Activity</option><option>Traffic Obstruction</option><option>Curfew Violation</option><option>Domestic Disturbance</option></select></div><div class="field"><label>Repeated Incidents</label><input id="cartRepeats" type="number" min="0" value="4" /></div><div class="field"><label>Time of Occurrence</label><input id="cartTime" type="time" value="21:30" /></div><div class="field"><label>Day of Week</label><select id="cartDay"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option selected>Saturday</option><option>Sunday</option></select></div><div class="field"><label>Location / Purok / Street</label><input id="cartLocation" type="text" value="Purok 3 - Amparo Main Road" /></div><div class="field"><label>Previous Risk History</label><select id="cartHistory"><option>Low</option><option>Moderate</option><option selected>High</option></select></div><div class="field"><label>Incident Frequency</label><select id="cartFrequency"><option>Low</option><option>Moderate</option><option selected>High</option></select></div></div><br><div class="btn-row"><button class="btn btn-primary" type="submit">Run CART Analysis</button><button class="btn btn-light" type="button" data-go-to="patrol">Open Patrol Support</button></div></form></article><article class="card-panel" id="cartResult">${renderCartResult(sample)}</article></div><article class="card-panel"><div class="section-title"><h3>Decision Tree Rule Explanation</h3><span>Simulated CART Path</span></div><div class="field-grid"><div class="subtle-banner"><strong>Root Node:</strong> Incident Pattern - The system evaluates incident type, repeated incidents, time, day, location, history, and frequency.</div><div class="subtle-banner"><strong>Low Pattern Branch:</strong> Low frequency, daytime occurrence, and no repeated hotspot history usually produce Level 1.</div><div class="subtle-banner"><strong>Risk Pattern Branch:</strong> Repeated incidents, night timing, risky incident types, and prior hotspot history increase classification.</div><div class="subtle-banner"><strong>Example Rule:</strong> If theft incidents repeatedly occur at night in the same area, the system classifies the location as Level 3 - High Crime / Considerable Danger and recommends increased patrol visibility.</div></div></article>`;
+    return `<div class="grid-2"><article class="card-panel"><div class="section-title"><h3>Simulated CART Risk Classifier</h3><span>Prototype Model</span></div><form id="cartForm"><div class="form-grid"><div class="field"><label>Incident Type</label><select id="cartType"><option>Theft</option><option>Physical Injury</option><option>Noise Complaint</option><option>Vandalism</option><option>Suspicious Activity</option><option>Traffic Obstruction</option><option>Curfew Violation</option><option>Domestic Disturbance</option></select></div><div class="field"><label>Repeated Incidents</label><input id="cartRepeats" type="number" min="0" value="4" /></div><div class="field"><label>Time of Occurrence</label><input id="cartTime" type="time" value="21:30" /></div><div class="field"><label>Day of Week</label><select id="cartDay"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option selected>Saturday</option><option>Sunday</option></select></div><div class="field"><label>Location / Purok / Street</label><input id="cartLocation" type="text" value="Purok 3 - Amparo Main Road" /></div><div class="field"><label>Previous Risk History</label><select id="cartHistory"><option>Low</option><option>Moderate</option><option selected>High</option></select></div><div class="field"><label>Incident Frequency</label><select id="cartFrequency"><option>Low</option><option>Moderate</option><option selected>High</option></select></div></div><br><div class="btn-row"><button class="btn btn-primary" type="submit">Run CART Analysis</button><button class="btn btn-light" type="button" data-go-to="patrol">Open Patrol Support</button></div></form></article><article class="card-panel" id="cartResult">${renderCartResult(sample)}</article></div><article class="card-panel"><div class="section-title"><h3>Decision Tree Rule Explanation</h3><span>Simulated CART Path</span></div><div class="field-grid"><div class="subtle-banner"><strong>Roo [truncated]`;
   }
 
   function generatePatrolRecommendations() {
@@ -498,62 +529,66 @@
     const incidents = getMonthlyIncidents();
     const level3 = incidents.filter(item => Number(item.danger) === 3).length;
     const level2 = incidents.filter(item => Number(item.danger) === 2).length;
-    const level1 = incidents.filter(item => Number(item.danger) === 1).length;
-    const total = incidents.length;
+    const level1 = incidents.filter(item => Number(item.danger) === 1).length;    const total = incidents.length;
     const hotspotCount = new Set(incidents.map(item => item.location)).size;
-    const trendLabel = level3 >= 2 ? "High Risk Focus" : level2 >= 2 ? "Moderate Risk Focus" : "Stable Overview";
 
     return `
-      <div class="card-panel report-hero-panel">
+      <div class="card-panel">
         <div class="section-title">
           <div>
-            <h3>Reports Control Center</h3>
-            <p class="stat-note">Polished monthly summaries, exports, and decision-ready reporting for Barangay 179.</p>
+            <h3>Report Month Filter</h3>
+            <p class="stat-note">Reports follow the same shared monthly filter.</p>
           </div>
           ${renderMonthSelect("reportsMonth")}
         </div>
       </div>
-      <div class="grid-3 report-action-grid">
-        <article class="card-panel report-action-card">
-          <div class="section-title"><h3>Printable Incident Summary</h3><span>Ready for print</span></div>
-          <p class="stat-note">Formal report with totals, hotspot summaries, risk classification highlights, and patrol guidance.</p>
+      <div class="grid-3">
+        <article class="card-panel">
+          <div class="section-title">
+            <h3>Printable Incident Summary</h3>
+            <span>Ready for print</span>
+          </div>
+          <p class="stat-note">Formal report containing incident totals, hotspot summaries, risk classifications, and recommended patrol actions.</p>
           <div class="btn-row"><button class="btn btn-primary" type="button" data-print-report>Print / Export PDF</button></div>
         </article>
-        <article class="card-panel report-action-card">
-          <div class="section-title"><h3>Export CSV</h3><span>Spreadsheet ready</span></div>
-          <p class="stat-note">Download selected-month incident records in CSV format for documentation and data analysis.</p>
+        <article class="card-panel">
+          <div class="section-title">
+            <h3>Export CSV</h3>
+            <span>Spreadsheet export</span>
+          </div>
+          <p class="stat-note">Download selected-month incident records in spreadsheet-ready CSV format for documentation and testing.</p>
           <div class="btn-row"><button class="btn btn-success" type="button" data-export-csv>Export CSV</button></div>
         </article>
-        <article class="card-panel report-action-card">
-          <div class="section-title"><h3>Patrol Recommendation Export</h3><span>Decision support</span></div>
-          <p class="stat-note">Open patrol recommendations derived from CART analytics and risk scoring.</p>
+        <article class="card-panel">
+          <div class="section-title">
+            <h3>Patrol Recommendation Report</h3>
+            <span>Decision support</span>
+          </div>
+          <p class="stat-note">Generate priority patrol guidance based on simulated CART and BI risk indicators.</p>
           <div class="btn-row"><button class="btn btn-warning" type="button" data-go-to="patrol">View Patrol Report</button></div>
         </article>
       </div>
-      <div class="grid-4 report-summary-grid">
-        ${statCard("Total Incidents", total, "Recorded in the selected month.")}
-        ${statCard("High-Risk Records", level3, "Level 3 incidents requiring immediate attention.")}
-        ${statCard("Moderate-Risk Records", level2, "Level 2 incidents requiring monitoring.")}
-        ${statCard("Hotspot Areas", hotspotCount, "Distinct barangay locations with reported incidents.")}
-      </div>
-      <div class="grid-2 report-data-grid">
-        <article class="card-panel">
-          <div class="section-title"><h3>Incident Records</h3><span>${total} record${total === 1 ? "" : "s"}</span></div>
-          ${total ? renderIncidentTable(incidents.sort((a, b) => b.date.localeCompare(a.date))) : renderEmptyState("No incident records for selected month.")}
-        </article>
-        <article class="card-panel report-panel-highlight">
-          <div class="section-title"><h3>Monthly Executive Summary</h3><span>${trendLabel}</span></div>
-          <div class="field-grid">
-            <p class="stat-note"><strong>Coverage:</strong> Barangay 179, Amparo, Caloocan City.</p>
-            <p class="stat-note"><strong>Risk Overview:</strong> ${trendLabel} based on incident count, danger level, and hotspot spread.</p>
-            <p class="stat-note"><strong>Recommendation:</strong> Prioritize Level 3 hotspots for immediate patrol and monitor Level 2 locations for early response.</p>
-          </div>
-          <div class="report-metrics">
-            <div><strong>${level3 + level2}</strong><span>Higher-risk records</span></div>
-            <div><strong>${hotspotCount}</strong><span>Hotspot zones</span></div>
-          </div>
-        </article>
-      </div>
+      <article class="card-panel">
+        <div class="section-title">
+          <h3>Barangay 179 Monthly Crime Trend Report</h3>
+          <span>${formatMonthLabel(state.month)}</span>
+        </div>
+        <p class="stat-note">System Name: Barangay 179 Crime Intelligence and Patrol Decision Support System<br>Coverage Area: Barangay 179, Amparo, Caloocan City<br>Report Type: Incident Summary, Hotspot Summary, Patrol Recommendation, and Risk Classification Report</p>
+        <br>
+        <div class="grid-4">
+          ${statCard("Total Incidents", total, "Recorded in selected month.")}
+          ${statCard("Level 3 Records", level3, "High-risk danger indicators.")}
+          ${statCard("Level 2 Records", level2, "Moderate danger indicators.")}
+          ${statCard("Level 1 Records", level1, "Lower-risk records.")}
+        </div>
+      </article>
+      <article class="card-panel">
+        <div class="section-title">
+          <h3>Incident Summary Overview</h3>
+          <span>${hotspotCount} hotspot/s</span>
+        </div>
+        <p class="stat-note">This report view summarizes incidents, risk zones, and patrol recommendation outputs for the selected month.</p>
+      </article>
     `;
   }
 
@@ -582,11 +617,10 @@
   }
 
   function renderSettingsPage() {
-    return `<div class="grid-2"><article class="card-panel"><div class="section-title"><h3>Barangay Map Settings</h3><span>Configuration</span></div><form id="settingsForm" class="field-grid"><div class="field"><label>Default Map Center Latitude</label><input id="centerLat" type="number" step="0.0001" value="${state.settings.centerLat}" /></div><div class="field"><label>Default Map Center Longitude</label><input id="centerLng" type="number" step="0.0001" value="${state.settings.centerLng}" /></div><div class="field"><label>High Risk Threshold</label><input id="highRiskThreshold" type="number" min="1" max="3" value="${state.settings.highRiskThreshold}" /></div><div class="field"><label>Moderate Risk Threshold</label><input id="moderateThreshold" type="number" min="1" max="3" value="${state.settings.moderateThreshold}" /></div><div class="field"><label>Patrol Window</label><input id="patrolWindow" type="text" value="${escapeHtml(state.settings.patrolWindow)}" /></div><div class="btn-row"><button class="btn btn-primary" type="submit">Save Settings</button></div></form></article><article class="card-panel"><div class="section-title"><h3>Risk Classification Settings</h3><span>CART Simulation</span></div><div class="field-grid"><div class="subtle-banner"><strong>Level 1 Rule:</strong> Low frequency, daytime, no repeated hotspot history.</div><div class="subtle-banner"><strong>Level 2 Rule:</strong> Moderate recurrence, scheduled patrol recommended.</div><div class="subtle-banner"><strong>Level 3 Rule:</strong> Repeated incidents, high-risk type, night time, prior hotspot history.</div></div></article></div><article class="card-panel"><div class="section-title"><h3>System Reset</h3><span>Prototype Testing</span></div><p class="stat-note">Resetting will restore the original sample users and dummy incident records.</p><div class="btn-row"><button class="btn btn-warning" type="button" data-reset-sample-data>Reset Sample Data</button><button class="btn btn-danger" type="button" data-clear-all-data>Clear All Data</button></div></article>`;
+    return `<div class="grid-2"><article class="card-panel"><div class="section-title"><h3>Barangay Map Settings</h3><span>Configuration</span></div><form id="settingsForm" class="field-grid"><div class="field"><label>Default Map Center Latitude</label><input id="centerLat" type="number" step="0.0001" value="${state.settings.centerLat}" /></div><div class="field"><label>Default Map Center Longitude</label><input id="centerLng" type="number" step="0.0001" value="${state.settings.centerLng}" /></div><div class="field"><label>High Risk Threshold</label><input id="highRiskThreshold" type="number" min="1" max="3" value="${state.settings.highRiskThreshold}" /></div><div class="field"><label>Moderate Risk Threshold</label><input id="moderateThreshold" type="number" min="1" max="3" value="${state.settings.moderateThreshold}" /></div><div class="field"><label>Patrol Window</label><input id="patrolWindow" type="text" value="${escapeHtml(state.settings.patrolWindow)}" /></div><div class="btn-row"><button class="btn btn-primary" type="submit">Save Settings</button></div></form></article><article class="card-panel"><div class="section-title"><h3>Risk Classification Settings</h3><span>CART Simulation</span></div><div class="field-grid"><div class="subtle-banner"><strong>Level 1 Rule:</strong> Low frequency, daytime, no repeated hotspot history.</div><div class="subtle-banner"><strong>Level 2 Rule:</strong> Moderate recurrence, scheduled patrol recommended.</div><div class="subtle-banner"><strong>Level 3 Rule:</strong> Repeated incidents, high-risk type, night time, prior hotspot history.</div></div></article></div><article class="card-panel"><div class="section-title"><h3>System Reset</h3><span>Prototype Testing</span></div><p class="stat-note">Resetting will restore the original sample users and dummy incident records.</p><div class="btn-row"><button class="btn btn-warning" type="button" data-reset-sample-data>Reset Sample Data</button><button class="btn btn-danger" type="button" data-clear-all-data>Clear All Local Data</button></div></article>`;
   }
 
   function renderIncidentsPage() {
-    const filterRecords = getMonthlyIncidents();
     const query = state.incidentSearch.trim().toLowerCase();
     const filtered = state.incidents.filter(item => {
       const matchesMonth = item.date.startsWith(state.month);
@@ -595,7 +629,7 @@
     }).sort((a, b) => b.date.localeCompare(a.date));
     const editing = state.editingIncidentId ? state.incidents.find(item => String(item.id) === String(state.editingIncidentId)) : null;
 
-    return `<div class="card-panel"><div class="section-title"><div><h3>Incident Search and Month Filter</h3><p class="stat-note">Add, edit, delete, search, and filter incident records without leaving this page.</p></div><div class="btn-row"><label class="field" style="margin:0; min-width:240px;"><span style="display:block; margin-bottom:8px; font-size:13px; font-weight:800; color:#334155;">Search Records</span><input id="incidentSearch" type="search" placeholder="Type a location, reporter, or incident type" value="${escapeHtml(state.incidentSearch)}" /></label>${renderMonthSelect("incidentsMonth")}</div></div></div><div class="grid-2"><article class="card-panel"><div class="section-title"><h3>${editing ? "Edit Incident" : "Add Incident"}</h3><span>${editing ? `Editing #${editing.id}` : "New record"}</span></div><form id="incidentForm" class="field-grid"><input type="hidden" id="incidentId" value="${editing ? escapeHtml(editing.id) : ""}" /><div class="form-grid"><div class="field"><label>Incident Type</label><input id="incidentType" required value="${escapeHtml(editing?.type || "")}" placeholder="Theft" /></div><div class="field"><label>Incident Date</label><input id="incidentDate" required type="date" value="${escapeHtml(editing?.date || `${state.month}-01`)}" /></div><div class="field"><label>Incident Time</label><input id="incidentTime" required type="time" value="${escapeHtml(editing?.time || "21:00")}" /></div><div class="field"><label>Status</label><select id="incidentStatus"><option ${editing?.status === "Pending" ? "selected" : ""}>Pending</option><option ${editing?.status === "Under Review" ? "selected" : ""}>Under Review</option><option ${editing?.status === "Patrolled" ? "selected" : ""}>Patrolled</option><option ${editing?.status === "Resolved" ? "selected" : ""}>Resolved</option></select></div><div class="field"><label>Location</label><input id="incidentLocation" required value="${escapeHtml(editing?.location || "")}" placeholder="Purok 3 - Amparo Main Road" /></div><div class="field"><label>Reported By</label><input id="incidentReportedBy" required value="${escapeHtml(editing?.reportedBy || "")}" placeholder="Tanod Patrol A" /></div><div class="field"><label>Danger Level</label><select id="incidentDanger"><option value="1" ${Number(editing?.danger) === 1 ? "selected" : ""}>1 - Low</option><option value="2" ${Number(editing?.danger) === 2 ? "selected" : ""}>2 - Moderate</option><option value="3" ${Number(editing?.danger) === 3 ? "selected" : ""}>3 - High</option></select></div><div class="field"><label>Recommended Action</label><input id="incidentAction" value="${escapeHtml(editing?.action || "")}" placeholder="Priority patrol and close monitoring" /></div><div class="field"><label>Latitude</label><input id="incidentLat" type="number" step="0.0001" required value="${escapeHtml(editing?.lat || state.settings.centerLat)}" /></div><div class="field"><label>Longitude</label><input id="incidentLng" type="number" step="0.0001" required value="${escapeHtml(editing?.lng || state.settings.centerLng)}" /></div></div><div class="field"><label>Description</label><textarea id="incidentDescription" required placeholder="Short narrative of the incident">${escapeHtml(editing?.description || "")}</textarea></div><div class="btn-row"><button class="btn btn-primary" type="submit">${editing ? "Update Incident" : "Save Incident"}</button><button class="btn btn-light" type="button" data-clear-incident-form>Clear Form</button></div></form></article><article class="card-panel"><div class="section-title"><h3>Monthly Snapshot</h3><span>${filterRecords.length} record/s</span></div><div class="field-grid">${statCard("Level 3", filterRecords.filter(item => Number(item.danger) === 3).length, "High-risk entries in the selected month.")}${statCard("Level 2", filterRecords.filter(item => Number(item.danger) === 2).length, "Moderate-risk entries in the selected month.")}${statCard("Level 1", filterRecords.filter(item => Number(item.danger) === 1).length, "Low-risk entries in the selected month.")}</div></article></div><article class="card-panel"><div class="section-title"><h3>Incident Records</h3><span>${filtered.length} matching record/s</span></div>${renderIncidentTable(filtered, { interactive: true, idPrefix: "incident" })}</article>`;
+    return `<div class="card-panel"><div class="section-title"><div><h3>Incident Search and Month Filter</h3><p class="stat-note">Add, edit, delete, search, and filter incident records without leaving this page.</p></div><div class="btn-row"><label class="field" style="margin:0; min-width:240px;"><span style="display:block; margin-bottom:8px; font-size:13px; font-weight:800; color:#334155;">Search Records</span><input id="incidentSearch" type="search" placeholder="Type a location, reporter, or incident type" value="${escapeHtml(state.incidentSearch)}" /></label>${renderMonthSelect("incidentsMonth")}</div></div></div><div class="grid-2"><article class="card-panel"><div class="section-title"><h3>${editing ? "Edit Incident" : "Add Incident"}</h3><span>${editing ? `Editing #${editing.id}` : "New record"}</span></div><form id="incidentForm" class="field-grid"><input type="hidden" id="incidentId" value="${editing ? escapeHtml(editing.id) : ""}" /><div class="form-grid"><div class="field"><label>Incident Type</label><input id="incidentType" required value="${escapeHtml(editing?.type || "")}" placeholder="Theft" /></div><div class="field"><label>Incident Date</label><input id="incidentDate" required type="date" value="${escapeHtml(editing?.date || `${state.month}-01`)}" /></div><div class="field"><label>Incident Time</label><input id="incidentTime" required type="time" value="${escapeHtml(editing?.time || "21:00")}" /></div><div class="field"><label>Status</label><select id="incidentStatus"><option ${editing?.status === "Pending" ? "selected" : ""}>Pending</option><option ${editing?.status === "Under Review" ? "selected" : ""}>Under Review</option><option ${editing?.status === "Patrolled" ? "selected" : ""}>Patrolled</option><option ${editing?.status === "Resolved" ? "selected" : ""}>Resolved</option></select></div><div class="field"><label>Location</label><input id="incidentLocation" required value="${escapeHtml(editing?.location || "")}" placeholder="Purok 3 - Amparo Main Road" /></div><div class="field"><label>Description</label><textarea id="incidentDescription" rows="3" placeholder="Brief incident details">${escapeHtml(editing?.description || "")}</textarea></div><div class="field"><label>Reported By</label><input id="incidentReportedBy" required value="${escapeHtml(editing?.reportedBy || "")}" /></div><div class="field"><label>Danger Level</label><input id="incidentDanger" type="number" min="1" max="3" value="${escapeHtml(editing?.danger || 1)}" /></div><div class="field"><label>Latitude</label><input id="incidentLat" type="number" step="0.0001" value="${escapeHtml(editing?.lat || 14.7287)}" /></div><div class="field"><label>Longitude</label><input id="incidentLng" type="number" step="0.0001" value="${escapeHtml(editing?.lng || 120.9834)}" /></div><div class="field"><label>Recommended Action</label><textarea id="incidentAction" rows="2" placeholder="Suggested action">${escapeHtml(editing?.action || "")}</textarea></div></div><div class="btn-row"><button class="btn btn-primary" type="submit">${editing ? "Save Changes" : "Add Incident"}</button><button class="btn btn-secondary" type="button" data-clear-incident-form>Clear</button></div></form></article><article class="card-panel"><div class="section-title"><h3>Incident Records</h3><span>${filtered.length} item/s</span></div>${renderIncidentTable(filtered, { interactive: true })}</article></div>`;
   }
 
   function bindPage(page) {

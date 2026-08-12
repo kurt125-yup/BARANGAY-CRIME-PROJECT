@@ -1,0 +1,3 @@
+Number(item.danger) === 2).length;
+    const level1 = incidents.filter(item => Number(item.danger) === 1).length;
+    return `<div class="card-panel"><div class="section-title"><div><h3>Report Month Filter</h3><p class="stat-note">Reports follow the same shared monthly filter.</p></div>${renderMonthSelect("reportsMonth")}</div></div><div class="grid-3"><article class="card-pa

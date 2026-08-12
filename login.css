@@ -1,0 +1,114 @@
+@import url("assets/css/style.css");
+
+/* Redesigned login styles for Barangay 179 Amparo Crime Analytics System */
+:root{
+  --primary:#0B2A4A; /* navy */
+  --blue:#1677D2;
+  --bright-blue:#287FE5;
+  --gold:#D9A514;
+  --card-bg: #FFFFFF;
+  --muted: #5F6B78;
+  --wash: rgba(238,246,252,0.75);
+}
+
+html,body{
+  height:100%;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: #EEF6FC;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Background collage panels */
+.background-container{ position:fixed; inset:0; z-index:0; overflow:hidden; }
+.bg-panel{ position:absolute; background-size:cover; background-position:center; filter: saturate(0.98) brightness(0.97); }
+.bg-panel-1{ left:-6%; top:-6%; width:48%; height:112%; background-image: url('assets/logo.jpg'); background-size:cover; background-position:center left; transform: translateZ(0); opacity:0.96; border-top-right-radius:30px; }
+.bg-panel-2{ right:-6%; top:-6%; width:48%; height:112%; background-image: url('548282440_122097940137033873_5941627751202033723_n.jpg'); background-size:cover; background-position:center right; opacity:0.96; border-top-left-radius:30px; }
+.bg-panel-3{ left:8%; bottom:8%; width:34%; height:36%; background-size:cover; background-position:center; border-radius:14px; box-shadow: 0 8px 30px rgba(4,9,25,0.06); }
+.bg-panel-4{ right:8%; bottom:8%; width:34%; height:36%; background-size:cover; background-position:center; border-radius:14px; box-shadow: 0 8px 30px rgba(4,9,25,0.06); }
+.bg-wash{ position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.86)); }
+
+/* Main wrapper/card */
+.main-wrapper{ position:relative; z-index:5; }
+.login-card{ width:580px; max-width:94%; background:var(--card-bg); border-radius:28px; padding:34px; box-shadow: 0 24px 54px rgba(4,9,25,0.12); border:1px solid rgba(12,45,85,0.04); }
+.brand-logo{ width:108px; height:108px; object-fit:contain; border-radius:50%; box-shadow:0 10px 30px rgba(11,109,240,0.08); border:6px solid #fff; background:#fff; }
+.system-title{ font-weight:700; color:var(--primary); font-size:1.05rem; line-height:1; }
+
+/* Branding decorative */
+.stars i{ color: var(--gold); margin:0 4px; font-size:1.05rem; }
+.separator{ display:flex; align-items:center; gap:10px; justify-content:center; }
+.separator span{ display:block; width:72px; height:3px; background:linear-gradient(90deg, rgba(217,165,20,0.95), rgba(249,241,209,0.7)); border-radius:3px; }
+
+/* Inputs */
+.custom-input-group{ margin-bottom:16px; }
+.custom-input-group .input-group-text{ border-radius:12px 0 0 12px; border:1px solid rgba(95,107,120,0.08); background:transparent; min-width:56px; justify-content:center; }
+.custom-input-group .form-control{ border-left:0; border-radius:0 12px 12px 0; height:60px; padding:0.875rem 1rem; box-shadow:none; border:1px solid rgba(95,107,120,0.06); font-size:0.96rem; }
+.custom-input-group .form-control::placeholder{ color: #9aa6b3; }
+.cursor-pointer{ cursor:pointer; }
+
+/* Focus state */
+.custom-input-group .form-control:focus{ outline: none; box-shadow: 0 6px 18px rgba(40,127,229,0.08); border-color: var(--bright-blue); }
+.custom-input-group .input-group-text:focus{ border-color: var(--bright-blue); }
+
+/* Remember / Forgot row */
+.forgot-link{ color:var(--blue); text-decoration:none; font-weight:600; }
+.form-check-label.text-muted{ color:var(--muted); }
+
+/* Login button */
+.login-btn{ background: linear-gradient(90deg,var(--blue), var(--bright-blue)); border-radius:12px; padding:14px 18px; font-weight:700; border: none; color:#fff; height:56px; }
+.login-btn i{ font-size:1.05rem; }
+.login-btn:hover{ transform: translateY(-2px); box-shadow: 0 10px 30px rgba(40,127,229,0.16); }
+
+/* Footer security */
+.footer-section{ margin-top:6px; }
+.footer-section .footer-icon{ width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center; border-radius:10px; background: linear-gradient(180deg, rgba(11,109,240,0.08), rgba(6,182,212,0.06)); }
+.small-text{ color:var(--muted); }
+.copyright-text{ color:var(--muted); font-size:0.82rem; }
+
+/* Role selector */
+.role-selector-card{ position:fixed; right:22px; bottom:22px; z-index:8; width:300px; background:var(--card-bg); padding:16px; border-radius:12px; box-shadow:0 18px 40px rgba(4,9,25,0.08); border:1px solid rgba(12,45,85,0.06); }
+.role-item{ padding:10px; border-radius:10px; transition: transform .18s ease, box-shadow .18s ease; display:block; }
+.role-item:hover{ transform: translateY(-6px); box-shadow: 0 12px 30px rgba(4,9,25,0.06); }
+.role-icon{ width:48px; height:48px; display:inline-flex; align-items:center; justify-content:center; border-radius:10px; }
+.role-icon .bi{ font-size:1.25rem; }
+
+/* small animations */
+.float-animation{ transition: transform 0.6s ease; }
+.float-animation:hover{ transform: translateY(-6px); }
+
+/* Responsive adjustments */
+@media (max-width:992px){
+  .login-card{ width:520px; padding:28px; }
+}
+
+@media (max-width:720px){
+  .bg-panel-1, .bg-panel-2, .bg-panel-3, .bg-panel-4{ display:none; }
+  .bg-wash{ background: linear-gradient(180deg, rgba(238,246,252,0.95), rgba(255,255,255,0.98)); }
+  .role-selector-card{ position:static; margin:18px auto 0; width:92%; }
+  .main-wrapper{ padding:18px; }
+  .login-card{ width:calc(100% - 36px); border-radius:18px; }
+}
+
+/* Accessibility tweaks */
+input[type="text"], input[type="password"]{ -webkit-appearance:none; -moz-appearance:none; appearance:none; }
+
+/* Ensure images don't break layout */
+.brand-logo, .bg-panel{ max-width:100%; }
+
+/* Disable large decorative overlays inherited from global stylesheet */
+.bg-panel::before,
+.bg-panel::after,
+.background-container::after,
+.bg-wash {
+  display: none !important;
+  background: none !important;
+  opacity: 0 !important;
+}
+
+/* Prevent body-level gradient wash from obscuring photos */
+body, html {
+  background-image: none !important;
+  background-color: var(--wash);
+}
+
+/* Ensure photographic panels remain vivid */
+.bg-panel { filter: none !important; opacity: 1 !important; }
